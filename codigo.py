@@ -45,7 +45,7 @@ class Zumbie(pygame.sprite.Sprite):
         self.rect=self.image.get_rect()
         
         #Definindo tamanho do Mob
-        self.image=pygame.transform.scale(mob_img,(50,38))
+        self.image=pygame.transform.scale(mob_img,(10,10))
         
         #Deixando Transparente
         self.image.set_colorkey(BLACK)
@@ -63,6 +63,35 @@ class Zumbie(pygame.sprite.Sprite):
     def update(self):
         self.rect.x += self.speedx
         self.rect.y += self.speedy
+class Shooter(pygame.sprite.Sprite):
+    
+    #Construtor
+    def __init__(self):
+        
+        pygame.sprite.Sprite.__init__(self)
+        
+        mob_img=pygame.image.load(path.join(img_dir, "soldier.png")).convert()
+        self.image=mob_img
+        
+        #Definindo posição do mob
+        self.rect=self.image.get_rect()
+        
+        #Definindo tamanho do Mob
+        self.image=pygame.transform.scale(mob_img,(10,10))
+        
+        #Deixando Transparente
+        self.image.set_colorkey(BLACK)
+        
+        #Centraliza embaixo da tela.
+        self.rect.centerx = WIDTH / 2
+        self.rect.centery = HEIGHT / 2
+     
+        
+    # Metodo que atualiza a posição da navinha
+    def update(self):
+        self.rect.x += self.speedx
+        self.rect.y += self.speedy
+
 
 try:
     
@@ -78,7 +107,31 @@ try:
             # Verifica se foi fechado
             if event.type == pygame.QUIT:
                 running = False
-    
+         # Verifica se apertou alguma tecla.
+            if event.type == pygame.KEYDOWN:
+                # Dependendo da tecla, altera a velocidade.
+                if event.key == pygame.K_LEFT:
+                    Shooter.speedx = -5
+                if event.key == pygame.K_RIGHT:
+                    Shooter.speedx = 5
+                if event.key == pygame.K_UP:
+                    Shooter.speedy = -5
+                if event.key == pygame.K_DOWN:
+                    Shooter.speedx = 5
+                # Se for um espaço atira!
+                
+                    
+            # Verifica se soltou alguma tecla.
+            if event.type == pygame.KEYUP:
+                # Dependendo da tecla, altera a velocidade.
+                if event.key == pygame.K_LEFT:
+                    Shooter.speedx = 0
+                if event.key == pygame.K_RIGHT:
+                    Shooter.speedx = 0
+                if event.key == pygame.K_UP:
+                    Shooter.speedx = 0
+                if event.key == pygame.K_DOWN:
+                    Shooter.speedx = 0
         # A cada loop, redesenha o fundo e os sprites
         screen.fill(BLACK)
         screen.blit(background, background_rect)
