@@ -11,7 +11,7 @@ img_dir = path.join(path.dirname(__file__), 'imagens')
 
 # Dados gerais do jogo.
 WIDTH = 600 # Largura da tela
-HEIGHT = 600 # Altura da tela
+HEIGHT = 400 # Altura da tela
 FPS = 60 # Frames por segundo
 
 # Definindo cores
@@ -31,45 +31,38 @@ background_rect = background.get_rect()
 
 
 
-class Player(pygame.sprite.Sprite):
+class Zumbie(pygame.sprite.Sprite):
     
-    #Construtor de classe
+    #Construtor
     def __init__(self):
         
-        #Construtor da classe pai (Sprite)
         pygame.sprite.Sprite.__init__(self)
         
-        #Carregando a imagem de fundo
-        player_img=pygame.image.load(path.join(img_dir, "playerShip1_orange.png")).convert()
-        self.image = player_img
+        mob_img=pygame.image.load(path.join(img_dir, "zumbie.png")).convert()
+        self.image=mob_img
         
-        #Diminuindo o tamanho da imagem
-        self.image=pygame.transform.scale(player_img,(50,38))
-        
-        #Deixando transparente
-        self.image.set_colorkey(BLACK)
-        
-        #Detalhes sobre o posicionamento
+        #Definindo posição do mob
         self.rect=self.image.get_rect()
         
-        #Centraliza embaixo da tela
-        self.rect.centerx= WIDTH / 2
-        self.rect.bottom= HEIGHT - 10
+        #Definindo tamanho do Mob
+        self.image=pygame.transform.scale(mob_img,(50,38))
         
+        #Deixando Transparente
+        self.image.set_colorkey(BLACK)
         
+        #Definindo posição do mob como aleatório
+        self.rect.x=random.randrange(WIDTH- self.rect.width)
+        self.rect.bottom=random.randrange(-100,-40)
 
-        self.speedx=0
+        #Definindo velociada do MOB
+        self.speedx=random.randrange(-3,3)
+        self.speedy=random.randrange(2,9)
         
-        #Melhora a colisão, trocando a colisão de retângulo para círculo
-        self.radius=25
         
+    # Metodo que atualiza a posição da navinha
     def update(self):
         self.rect.x += self.speedx
-        
-        if self.rect.right> WIDTH:
-            self.rect.right =WIDTH
-        if self.rect.left<0:
-            self.rect.left=0 
+        self.rect.y += self.speedy
 
 try:
     
