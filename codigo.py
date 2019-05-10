@@ -14,6 +14,8 @@ WIDTH = 600 # Largura da tela
 HEIGHT = 400 # Altura da tela
 FPS = 60 # Frames por segundo
 
+#pega tempo inicial
+tempo_inicial = pygame.time.Clock()
 # Definindo cores
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -133,6 +135,13 @@ try:
                 if event.key == pygame.K_DOWN:
                     Shooter.speedx = 0
         # A cada loop, redesenha o fundo e os sprites
+        #Tempo de update
+        now = pygame.time.Clock()
+        time_elapsed = now - tempo_inicial
+        if time_elapsed > 10000:
+            
+        
+        
         screen.fill(BLACK)
         screen.blit(background, background_rect)
         
