@@ -73,6 +73,10 @@ class Shooter(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         
         mob_img=pygame.image.load(path.join(img_dir, "soldier.png")).convert()
+        mob_baixo=pygame.image.load(path.join(img_dir, "soldier_baixo.png")).convert()
+        mob_esq=pygame.image.load(path.join(img_dir, "soldier_esquerda.png")).convert()
+        mob_dir=pygame.image.load(path.join(img_dir, "soldier_direita.png")).convert()
+       
         self.image=mob_img
         
         #Definindo posição do mob
@@ -93,6 +97,14 @@ class Shooter(pygame.sprite.Sprite):
     def update(self):
         self.rect.x += self.speedx
         self.rect.y += self.speedy
+        if self.rect.right > WIDTH:
+            self.rect.right = WIDTH
+        if self.rect.left < 0:
+            self.rect.left = 0
+        if self.rect.up < 0:
+            self.rect.up= 0
+        if self.rect.down > HEIGHT:
+            self.rect.up = HEIGHT
 
 
 try:
@@ -114,12 +126,16 @@ try:
                 # Dependendo da tecla, altera a velocidade.
                 if event.key == pygame.K_LEFT:
                     Shooter.speedx = -5
+                    Shooter.image= mob_esq
                 if event.key == pygame.K_RIGHT:
                     Shooter.speedx = 5
+                    Shooter.image= mob_dir
                 if event.key == pygame.K_UP:
                     Shooter.speedy = -5
+                    Shooter.image= mob_img
                 if event.key == pygame.K_DOWN:
                     Shooter.speedx = 5
+                    Shooter.image= mob_baixo
                 # Se for um espaço atira!
                 
                     
