@@ -158,9 +158,11 @@ try:
             
         
         
-        screen.fill(BLACK)
+        screen.fill (BLACK)
         screen.blit(background, background_rect)
+        all_sprites.draw(screen)
         
+
         
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
