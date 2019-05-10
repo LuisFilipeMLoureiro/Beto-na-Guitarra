@@ -11,8 +11,8 @@ import random
 img_dir = path.join(path.dirname(__file__), 'imagens')
 
 # Dados gerais do jogo.
-WIDTH = 840 # Largura da tela
-HEIGHT = 450 # Altura da tela
+WIDTH = 846 # Largura da tela
+HEIGHT = 469 # Altura da tela
 FPS = 60 # Frames por segundo
 
 #pega tempo inicial
@@ -71,11 +71,11 @@ class Shooter(pygame.sprite.Sprite):
         
         self.image=mob_img
         
+        #Definindo tamanho do Mob
+        self.image=pygame.transform.scale(mob_img,(50,50))
+        
         #Definindo posição do mob
         self.rect=self.image.get_rect()
-        
-        #Definindo tamanho do Mob
-        self.image=pygame.transform.scale(mob_img,(10,10))
         
         #Deixando Transparente
         self.image.set_colorkey(BLACK)
@@ -106,15 +106,15 @@ class Shooter(pygame.sprite.Sprite):
 
 #Iniciação do Pygame
 pygame.init()
+#Carrega a tela com esse tamanho
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 #Posições dos soldados
-mob_img=pygame.image.load(path.join(img_dir, "soldier.jpg")).convert()
+mob_img=pygame.image.load(path.join(img_dir, "soldadonv.png")).convert()
 mob_baixo=pygame.image.load(path.join(img_dir, "soldier_baixo.jpg")).convert()
 mob_esq=pygame.image.load(path.join(img_dir, "soldier_esquerda.jpg")).convert()
 mob_dir=pygame.image.load(path.join(img_dir, "soldier_direita.jpg")).convert()
 
-#Tamanho da tela
 
 # Nome do jogo
 pygame.display.set_caption("BetoField")
@@ -125,6 +125,7 @@ clock = pygame.time.Clock()
 # Carrega o fundo do jogo
 background = pygame.image.load(path.join(img_dir, "imagem_fundo.png")).convert()
 background_rect = background.get_rect()
+
 
 
 # Comando para evitar travamentos.
@@ -164,17 +165,25 @@ try:
             if event.type == pygame.KEYDOWN:
                 # Dependendo da tecla, altera a velocidade.
                 if event.key == pygame.K_LEFT:
-                    Shooter.speedx = -5
-                    Shooter.image= mob_esq
+                    shooter.speedx -= 5
+                    shooter.image= mob_esq
+                    shooter.image=pygame.transform.scale(mob_img,(50,50))
+                    shooter.image.set_colorkey(BLACK)
                 if event.key == pygame.K_RIGHT:
-                    Shooter.speedx = 5
-                    Shooter.image= mob_dir
+                    shooter.speedx += 5
+                    shooter.image= mob_dir
+                    shooter.image=pygame.transform.scale(mob_img,(50,50))
+                    shooter.image.set_colorkey(BLACK)
                 if event.key == pygame.K_UP:
-                    Shooter.speedy = -5
-                    Shooter.image= mob_img
+                    shooter.speedy -= 5
+                    shooter.image= mob_img
+                    shooter.image=pygame.transform.scale(mob_img,(50,50))
+                    shooter.image.set_colorkey(BLACK)
                 if event.key == pygame.K_DOWN:
-                    Shooter.speedx = 5
-                    Shooter.image= mob_baixo
+                    shooter.speedy += 5
+                    shooter.image= mob_baixo
+                    shooter.image=pygame.transform.scale(mob_img,(50,50))
+                    shooter.image.set_colorkey(BLACK)
                 # Se for um espaço atira!
                 
                     
@@ -182,13 +191,14 @@ try:
             if event.type == pygame.KEYUP:
                 # Dependendo da tecla, altera a velocidade.
                 if event.key == pygame.K_LEFT:
-                    Shooter.speedx = 0
+                    shooter.speedx += 5
+                    
                 if event.key == pygame.K_RIGHT:
-                    Shooter.speedx = 0
+                    shooter.speedx -= 5
                 if event.key == pygame.K_UP:
-                    Shooter.speedx = 0
+                    shooter.speedy += 5
                 if event.key == pygame.K_DOWN:
-                    Shooter.speedx = 0
+                    shooter.speedy -= 5
         # A cada loop, redesenha o fundo e os sprites
         all_sprites.update()
         # A cada loop, redesenha o fundo e os sprites
