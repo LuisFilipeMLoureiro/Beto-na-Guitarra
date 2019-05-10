@@ -25,6 +25,8 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
 
+       
+
 
 class Zumbie(pygame.sprite.Sprite):
     
@@ -67,11 +69,6 @@ class Shooter(pygame.sprite.Sprite):
         
         pygame.sprite.Sprite.__init__(self)
         
-        mob_img=pygame.image.load(path.join(img_dir, "soldier.jpg")).convert()
-        mob_baixo=pygame.image.load(path.join(img_dir, "soldier_baixo.jpg")).convert()
-        mob_esq=pygame.image.load(path.join(img_dir, "soldier_esquerda.jpg")).convert()
-        mob_dir=pygame.image.load(path.join(img_dir, "soldier_direita.jpg")).convert()
-       
         self.image=mob_img
         
         #Definindo posição do mob
@@ -109,9 +106,15 @@ class Shooter(pygame.sprite.Sprite):
 
 #Iniciação do Pygame
 pygame.init()
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+#Posições dos soldados
+mob_img=pygame.image.load(path.join(img_dir, "soldier.jpg")).convert()
+mob_baixo=pygame.image.load(path.join(img_dir, "soldier_baixo.jpg")).convert()
+mob_esq=pygame.image.load(path.join(img_dir, "soldier_esquerda.jpg")).convert()
+mob_dir=pygame.image.load(path.join(img_dir, "soldier_direita.jpg")).convert()
 
 #Tamanho da tela
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 # Nome do jogo
 pygame.display.set_caption("BetoField")
