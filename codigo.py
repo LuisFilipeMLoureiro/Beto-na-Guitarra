@@ -51,14 +51,15 @@ class Zumbie(pygame.sprite.Sprite):
         self.rect.y=random.randrange(HEIGHT- self.rect.height)
         self.rect.bottom=random.randrange(-100,-40)
         #Definindo velociada do Zumbie
-        self.speedx=random.randrange(-3,3)
-        self.speedy=random.randrange(2,9)
+        self.speedx=random.randrange(-1,1)
+        self.speedy=random.randrange(2,5)
         
         
     # Metodo que atualiza a posição da navinha
     def update(self):
         self.rect.x += self.speedx
         self.rect.y += self.speedy
+        
 class Shooter(pygame.sprite.Sprite):
     
     #Construtor
@@ -66,10 +67,10 @@ class Shooter(pygame.sprite.Sprite):
         
         pygame.sprite.Sprite.__init__(self)
         
-        mob_img=pygame.image.load(path.join(img_dir, "soldier.png")).convert()
-        mob_baixo=pygame.image.load(path.join(img_dir, "soldier_baixo.png")).convert()
-        mob_esq=pygame.image.load(path.join(img_dir, "soldier_esquerda.png")).convert()
-        mob_dir=pygame.image.load(path.join(img_dir, "soldier_direita.png")).convert()
+        mob_img=pygame.image.load(path.join(img_dir, "soldier.jpg")).convert()
+        mob_baixo=pygame.image.load(path.join(img_dir, "soldier_baixo.jpg")).convert()
+        mob_esq=pygame.image.load(path.join(img_dir, "soldier_esquerda.jpg")).convert()
+        mob_dir=pygame.image.load(path.join(img_dir, "soldier_direita.jpg")).convert()
        
         self.image=mob_img
         
@@ -85,6 +86,11 @@ class Shooter(pygame.sprite.Sprite):
         #Centraliza embaixo da tela.
         self.rect.centerx = WIDTH / 2
         self.rect.centery = HEIGHT / 2
+        
+        #Estabelecendo velocidades iniciais
+        self.speedx=0
+        self.speedy=0
+        
      
         
     # Metodo que atualiza a posição da navinha
@@ -95,10 +101,10 @@ class Shooter(pygame.sprite.Sprite):
             self.rect.right = WIDTH
         if self.rect.left < 0:
             self.rect.left = 0
-        if self.rect.up < 0:
-            self.rect.up= 0
-        if self.rect.down > HEIGHT:
-            self.rect.up = HEIGHT
+        if self.rect.top < 0:
+            self.rect.top= 0
+        if self.rect.bottom > HEIGHT:
+            self.rect.bottom = HEIGHT
 
 
 #Iniciação do Pygame
@@ -126,7 +132,9 @@ all_sprites=pygame.sprite.Group()
 
 # Cria um grupo só dos meteoros
 zumbies = Zumbie()
+shooter=Shooter()
 all_sprites.add(zumbies)
+all_sprites.add(shooter)
 try:
     #carregando sprites e cenário para o loop principal
         
