@@ -6,12 +6,13 @@
 import pygame
 from os import path
 import time
+import random
 # Estabelece a pasta que contem as figuras.
 img_dir = path.join(path.dirname(__file__), 'imagens')
 
 # Dados gerais do jogo.
-WIDTH = 600 # Largura da tela
-HEIGHT = 400 # Altura da tela
+WIDTH = 840 # Largura da tela
+HEIGHT = 450 # Altura da tela
 FPS = 60 # Frames por segundo
 
 #pega tempo inicial
@@ -24,14 +25,6 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
 
-pygame.init()
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-
-# Carrega o fundo do jogo
-background = pygame.image.load(path.join(img_dir, "imagem_fundo.png")).convert()
-background_rect = background.get_rect()
-
-
 
 class Zumbie(pygame.sprite.Sprite):
     
@@ -40,23 +33,24 @@ class Zumbie(pygame.sprite.Sprite):
         
         pygame.sprite.Sprite.__init__(self)
         
-        mob_img=pygame.image.load(path.join(img_dir, "zumbie.png")).convert()
-        self.image=mob_img
+        zumbie_img=pygame.image.load(path.join(img_dir, "zumbie.png")).convert()
+        self.image=zumbie_img
         
-        #Definindo posição do mob
+        #Definindo posição do zumbie
         self.rect=self.image.get_rect()
         
-        #Definindo tamanho do Mob
-        self.image=pygame.transform.scale(mob_img,(10,10))
+        #Definindo tamanho do zumbie
+        self.image=pygame.transform.scale(zumbie_img,(10,10))
         
         #Deixando Transparente
         self.image.set_colorkey(BLACK)
         
-        #Definindo posição do mob como aleatório
+        #Definindo posição do zumbie como aleatório
         self.rect.x=random.randrange(WIDTH- self.rect.width)
         self.rect.bottom=random.randrange(-100,-40)
-
-        #Definindo velociada do MOB
+        self.rect.y=random.randrange(HEIGHT- self.rect.height)
+        self.rect.bottom=random.randrange(-100,-40)
+        #Definindo velociada do Zumbie
         self.speedx=random.randrange(-3,3)
         self.speedy=random.randrange(2,9)
         
@@ -107,16 +101,50 @@ class Shooter(pygame.sprite.Sprite):
             self.rect.up = HEIGHT
 
 
+#Iniciação do Pygame
+pygame.init()
+
+#Tamanho da tela
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+# Nome do jogo
+pygame.display.set_caption("BetoField")
+
+# Variável para o ajuste de velocidade
+clock = pygame.time.Clock()
+
+# Carrega o fundo do jogo
+background = pygame.image.load(path.join(img_dir, "imagem_fundo.png")).convert()
+background_rect = background.get_rect()
+
+
+# Comando para evitar travamentos.
+background_rect=background.get_rect()
+
+all_sprites=pygame.sprite.Group()
+
+
+# Cria um grupo só dos meteoros
+zumbies = Zumbie()
+all_sprites.add(zumbies)
 try:
-    
-    # Loop principal.
+    #carregando sprites e cenário para o loop principal
+        
     running = True
+    screen.fill(BLACK)
+    screen.blit(background, background_rect)
+    all_sprites.draw(screen)
+    #Invertendo o display
+    pygame.display.flip()
+    # Loop principal.
     while running:
         
-    
+        # Ajusta a velocidade do jogo.
+        clock.tick(FPS)
         
         # Processa os eventos (mouse, teclado, botão, etc).
         for event in pygame.event.get():
+        
             
             # Verifica se foi fechado
             if event.type == pygame.QUIT:
@@ -151,17 +179,11 @@ try:
                 if event.key == pygame.K_DOWN:
                     Shooter.speedx = 0
         # A cada loop, redesenha o fundo e os sprites
-        #Tempo de update
-        now = pygame.time.Clock()
-        time_elapsed = now - tempo_inicial
-        if time_elapsed > 10000:
-            
-        
-        
-        screen.fill (BLACK)
+        all_sprites.update()
+        # A cada loop, redesenha o fundo e os sprites
+        screen.fill(BLACK)
         screen.blit(background, background_rect)
         all_sprites.draw(screen)
-        
 
         
         # Depois de desenhar tudo, inverte o display.
