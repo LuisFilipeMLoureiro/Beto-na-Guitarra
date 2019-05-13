@@ -72,15 +72,15 @@ class Shooter(pygame.sprite.Sprite):
         self.image=mob_img
         
         #Definindo tamanho do Mob
-        self.image=pygame.transform.scale(mob_img,(50,50))
+        self.image=pygame.transform.scale(mob_img,(200,200))
         
         #Definindo posição do mob
         self.rect=self.image.get_rect()
         
         #Deixando Transparente
-        self.image.set_colorkey(BLACK)
+        self.image.set_colorkey(WHITE)
         
-        #Centraliza embaixo da tela.
+        #Centraliza Na tela.
         self.rect.centerx = WIDTH / 2
         self.rect.centery = HEIGHT / 2
         
@@ -110,10 +110,10 @@ pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 #Posições dos soldados
-mob_img=pygame.image.load(path.join(img_dir, "soldadonv.png")).convert()
-mob_baixo=pygame.image.load(path.join(img_dir, "soldier_baixo.jpg")).convert()
-mob_esq=pygame.image.load(path.join(img_dir, "soldier_esquerda.jpg")).convert()
-mob_dir=pygame.image.load(path.join(img_dir, "soldier_direita.jpg")).convert()
+mob_img=pygame.image.load(path.join(img_dir, "sold_up.png")).convert()
+mob_baixo=pygame.image.load(path.join(img_dir, "sold_bottom.png")).convert()
+mob_esq=pygame.image.load(path.join(img_dir, "sold_left.png")).convert()
+mob_dir=pygame.image.load(path.join(img_dir, "sold_right.png")).convert()
 
 
 # Nome do jogo
@@ -167,23 +167,23 @@ try:
                 if event.key == pygame.K_LEFT:
                     shooter.speedx -= 5
                     shooter.image= mob_esq
-                    shooter.image=pygame.transform.scale(mob_img,(50,50))
-                    shooter.image.set_colorkey(BLACK)
+                    shooter.image=pygame.transform.scale(mob_img,(200,200))
+                    shooter.image.set_colorkey(WHITE)
                 if event.key == pygame.K_RIGHT:
                     shooter.speedx += 5
                     shooter.image= mob_dir
-                    shooter.image=pygame.transform.scale(mob_img,(50,50))
-                    shooter.image.set_colorkey(BLACK)
+                    shooter.image=pygame.transform.scale(mob_img,(200,200))
+                    shooter.image.set_colorkey(WHITE)
                 if event.key == pygame.K_UP:
                     shooter.speedy -= 5
                     shooter.image= mob_img
-                    shooter.image=pygame.transform.scale(mob_img,(50,50))
-                    shooter.image.set_colorkey(BLACK)
+                    shooter.image=pygame.transform.scale(mob_img,(200,200))
+                    shooter.image.set_colorkey(WHITE)
                 if event.key == pygame.K_DOWN:
                     shooter.speedy += 5
                     shooter.image= mob_baixo
-                    shooter.image=pygame.transform.scale(mob_img,(50,50))
-                    shooter.image.set_colorkey(BLACK)
+                    shooter.image=pygame.transform.scale(mob_img,(200,200))
+                    shooter.image.set_colorkey(WHITE)
                 # Se for um espaço atira!
                 
                     
