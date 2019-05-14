@@ -140,6 +140,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 #Posições dos soldados
 mob_img=pygame.image.load(path.join(img_dir, "sold_up.png")).convert()
+
 mob_baixo=pygame.image.load(path.join(img_dir, "sold_bottom.png")).convert()
 mob_esq=pygame.image.load(path.join(img_dir, "sold_left.png")).convert()
 mob_dir=pygame.image.load(path.join(img_dir, "sold_right.png")).convert()
@@ -197,24 +198,16 @@ try:
                 # Dependendo da tecla, altera a velocidade.
                 if event.key == pygame.K_LEFT:
                     shooter.speedx -= 5
-                    shooter.image= mob_esq
-                    shooter.image=pygame.transform.scale(mob_img,(30,30))
-                    shooter.image.set_colorkey(WHITE)
+                    shooter.image=pygame.transform.rotate(mob_img,90)
                 if event.key == pygame.K_RIGHT:
                     shooter.speedx += 5
-                    shooter.image= mob_dir
-                    shooter.image=pygame.transform.scale(mob_img,(30,30))
-                    shooter.image.set_colorkey(WHITE)
+                    shooter.image=pygame.transform.rotate(mob_img,270)
                 if event.key == pygame.K_UP:
                     shooter.speedy -= 5
-                    shooter.image= mob_img
-                    shooter.image=pygame.transform.scale(mob_img,(30,30))
-                    shooter.image.set_colorkey(WHITE)
+                    shooter.image=pygame.transform.rotate(mob_img,0)
                 if event.key == pygame.K_DOWN:
                     shooter.speedy += 5
-                    shooter.image= mob_baixo
-                    shooter.image=pygame.transform.scale(mob_img,(30,30))
-                    shooter.image.set_colorkey(WHITE)
+                    shooter.image=pygame.transform.rotate(mob_img,180)
                 # Se for um espaço atira!
                 if event.key == pygame.K_SPACE:
                     bullet = Bullet(shooter.rect.centerx, shooter.rect.top, bullet_image)
