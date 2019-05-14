@@ -114,7 +114,7 @@ class Bullet(pygame.sprite.Sprite):
         
         # Carregando a imagem de fundo.
         self.image = bullet_img
-        
+
         # Deixando transparente.
         self.image.set_colorkey(BLACK)
         
