@@ -42,7 +42,7 @@ class Zumbie(pygame.sprite.Sprite):
         self.rect=self.image.get_rect()
         
         #Definindo tamanho do zumbie
-        self.image=pygame.transform.scale(zumbie_img,(10,10))
+        self.image=pygame.transform.scale(zumbie_img,(30,30))
         
         #Deixando Transparente
         self.image.set_colorkey(BLACK)
@@ -72,7 +72,7 @@ class Shooter(pygame.sprite.Sprite):
         self.image=mob_img
         
         #Definindo tamanho do Mob
-        self.image=pygame.transform.scale(mob_img,(200,200))
+        self.image=pygame.transform.scale(mob_img,(30,30))
         
         #Definindo posição do mob
         self.rect=self.image.get_rect()
@@ -80,7 +80,7 @@ class Shooter(pygame.sprite.Sprite):
         #Deixando Transparente
         self.image.set_colorkey(WHITE)
         
-        #Centraliza Na tela.
+        #Centraliza na tela.
         self.rect.centerx = WIDTH / 2
         self.rect.centery = HEIGHT / 2
         
@@ -94,16 +94,45 @@ class Shooter(pygame.sprite.Sprite):
     def update(self):
         self.rect.x += self.speedx
         self.rect.y += self.speedy
-        if self.rect.right > WIDTH:
+        if self.rect.right >= WIDTH:
             self.rect.right = WIDTH
         if self.rect.left < 0:
             self.rect.left = 0
         if self.rect.top < 0:
             self.rect.top= 0
-        if self.rect.bottom > HEIGHT:
+        if self.rect.bottom >= HEIGHT:
             self.rect.bottom = HEIGHT
 
+# Classe Bullet que representa os tiros
+class Bullet(pygame.sprite.Sprite):
+    
+    # Construtor da classe.
+    def __init__(self, x, y, bullet_img):
+        
+        # Construtor da classe pai (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+        
+        # Carregando a imagem de fundo.
+        self.image = bullet_img
+        
+        # Deixando transparente.
+        self.image.set_colorkey(BLACK)
+        
+        # Detalhes sobre o posicionamento.
+        self.rect = self.image.get_rect()
+        
+        # Coloca no lugar inicial definido em x, y do constutor
+        self.rect.bottom = y
+        self.rect.centerx = x
+        self.speedy = -10
 
+    # Metodo que atualiza a posição da navinha
+    def update(self):
+        self.rect.y += self.speedy
+        
+        # Se o tiro passar do inicio da tela, morre.
+        if self.rect.bottom < 0:
+            self.kill()
 #Iniciação do Pygame
 pygame.init()
 #Carrega a tela com esse tamanho
@@ -114,7 +143,7 @@ mob_img=pygame.image.load(path.join(img_dir, "sold_up.png")).convert()
 mob_baixo=pygame.image.load(path.join(img_dir, "sold_bottom.png")).convert()
 mob_esq=pygame.image.load(path.join(img_dir, "sold_left.png")).convert()
 mob_dir=pygame.image.load(path.join(img_dir, "sold_right.png")).convert()
-
+bullet_image=pygame.image.load(path.join(img_dir, "laserRed16.png")).convert()
 
 # Nome do jogo
 pygame.display.set_caption("BetoField")
@@ -124,7 +153,7 @@ clock = pygame.time.Clock()
 
 # Carrega o fundo do jogo
 background = pygame.image.load(path.join(img_dir, "imagem_fundo.png")).convert()
-background_rect = background.get_rect()
+
 
 
 
@@ -132,13 +161,15 @@ background_rect = background.get_rect()
 background_rect=background.get_rect()
 
 all_sprites=pygame.sprite.Group()
-
+bullets = pygame.sprite.Group()
 
 # Cria um grupo só dos meteoros
+
 zumbies = Zumbie()
 shooter=Shooter()
 all_sprites.add(zumbies)
 all_sprites.add(shooter)
+
 try:
     #carregando sprites e cenário para o loop principal
         
@@ -167,25 +198,28 @@ try:
                 if event.key == pygame.K_LEFT:
                     shooter.speedx -= 5
                     shooter.image= mob_esq
-                    shooter.image=pygame.transform.scale(mob_img,(200,200))
+                    shooter.image=pygame.transform.scale(mob_img,(30,30))
                     shooter.image.set_colorkey(WHITE)
                 if event.key == pygame.K_RIGHT:
                     shooter.speedx += 5
                     shooter.image= mob_dir
-                    shooter.image=pygame.transform.scale(mob_img,(200,200))
+                    shooter.image=pygame.transform.scale(mob_img,(30,30))
                     shooter.image.set_colorkey(WHITE)
                 if event.key == pygame.K_UP:
                     shooter.speedy -= 5
                     shooter.image= mob_img
-                    shooter.image=pygame.transform.scale(mob_img,(200,200))
+                    shooter.image=pygame.transform.scale(mob_img,(30,30))
                     shooter.image.set_colorkey(WHITE)
                 if event.key == pygame.K_DOWN:
                     shooter.speedy += 5
                     shooter.image= mob_baixo
-                    shooter.image=pygame.transform.scale(mob_img,(200,200))
+                    shooter.image=pygame.transform.scale(mob_img,(30,30))
                     shooter.image.set_colorkey(WHITE)
                 # Se for um espaço atira!
-                
+                if event.key == pygame.K_SPACE:
+                    bullet = Bullet(shooter.rect.centerx, shooter.rect.top, bullet_image)
+                    all_sprites.add(bullet)
+                    bullets.add(bullet)
                     
             # Verifica se soltou alguma tecla.
             if event.type == pygame.KEYUP:
