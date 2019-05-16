@@ -129,8 +129,8 @@ class Bullet(pygame.sprite.Sprite):
         # Coloca no lugar inicial definido em x, y do constutor
         self.rect.bottom = y
         self.rect.centerx = x
-        self.speedy = SpeedyBull
-        self.speedx = SpeedxBull
+        self.speedy = speedy
+        self.speedx = speedx
 
     # Metodo que atualiza a posição da navinha
     def update(self):
@@ -139,6 +139,14 @@ class Bullet(pygame.sprite.Sprite):
         # Se o tiro passar do inicio da tela, morre.
         if self.rect.bottom < 0:
             self.kill()
+        if self.rect.top>HEIGHT:
+            self.kill( )
+        if self.rect.right < 0:
+            self.kill()
+        if self.rect.left>WIDTH:
+            self.kill()
+
+
 #Iniciação do Pygame
 pygame.init()
 #Carrega a tela com esse tamanho
