@@ -57,7 +57,7 @@ class Zumbie(pygame.sprite.Sprite):
         self.speedy=1
         
         
-    # Metodo que atualiza a posição da navinha
+    # Metodo que atualiza a posição do zumbie
     def update(self):
         if shooter.rect.x > self.rect.x:
             self.rect.x += self.speedx
@@ -118,6 +118,7 @@ class Bullet(pygame.sprite.Sprite):
         
         # Carregando a imagem de fundo.
         self.image = bullet_img
+        self.image=pygame.transform.scale(bullet_img,(30,30))
 
         # Deixando transparente.
         self.image.set_colorkey(BLACK)
@@ -267,6 +268,20 @@ try:
                     shooter.speedy += 3
                 if event.key == pygame.K_DOWN:
                     shooter.speedy -= 3
+         # Se o tiro chegar no zumbie, byebye zumbie
+        hits = pygame.sprite.groupcollide(zombies, bullets, True, True)
+        for hit in hits: # Pode haver mais de um
+
+            z = Zumbie() 
+            all_sprites.add(z)
+            zombies.add(z)
+
+        
+
+        
+        
+        
+        
         # A cada loop, redesenha o fundo e os sprites
         all_sprites.update()
         # A cada loop, redesenha o fundo e os sprites
