@@ -36,12 +36,11 @@ class Zumbie(pygame.sprite.Sprite):
         
         zumbie_img=pygame.image.load(path.join(img_dir, "zumbie.png")).convert()
         self.image=zumbie_img
-        
+        #Definindo tamanho do zumbie
+        self.image=pygame.transform.scale(zumbie_img,(30,30))
         #Definindo posição do zumbie
         self.rect=self.image.get_rect()
         
-        #Definindo tamanho do zumbie
-        self.image=pygame.transform.scale(zumbie_img,(30,30))
         
         #Deixando Transparente
         self.image.set_colorkey(BLACK)
@@ -52,8 +51,8 @@ class Zumbie(pygame.sprite.Sprite):
         self.rect.y=random.randrange(HEIGHT- self.rect.height)
         self.rect.bottom=random.randrange(-100,-40)
         #Definindo velociada do Zumbie
-        self.speedx=2
-        self.speedy=2
+        self.speedx=1
+        self.speedy=1
         
         
     # Metodo que atualiza a posição da navinha
@@ -105,7 +104,21 @@ class Shooter(pygame.sprite.Sprite):
             self.rect.top= 0
         if self.rect.bottom >= HEIGHT:
             self.rect.bottom = HEIGHT
-    
+class Ammo(pygame.sprite.Sprite):
+    # Construtor da classe.
+    def __init__(self, x, y):
+        
+        # Construtor da classe pai (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+        
+        # Carregando a imagem de fundo.
+        self.image = ammo_box
+        self.image=pygame.transform.scale(self.image,(5,5))
+        # Deixando transparente.
+        self.image.set_colorkey(WHITE)
+        # Detalhes sobre o posicionamento.
+        self.rect = self.image.get_rect()
+            
 # Classe Bullet que representa os tiros
 class Bullet(pygame.sprite.Sprite):
     
@@ -156,6 +169,7 @@ mob_Img=mob_img.set_colorkey(WHITE)
 bullet_image=pygame.image.load(path.join(img_dir, "balta_teste.png")).convert()
 bullet_image = pygame.transform.scale(bullet_image, (10, 10))        
 bullet_position=bullet_image
+ammo_box=pygame.image.load(path.join(img_dir, "amo_box.png")).convert()
 SpeedyBull=-15
 SpeedxBull=0
 
@@ -281,7 +295,10 @@ try:
             z = Zumbie() 
             all_sprites.add(z)
             zombies.add(z)
-
+        if hits:
+            am=random.randrange(0,10)
+            if am == 1:
+                ammo= Ammo(WIDTH/2,HEIGHT/2)
         # A cada loop, redesenha o fundo e os sprites
         all_sprites.update()
         # A cada loop, redesenha o fundo e os sprites
