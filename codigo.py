@@ -219,7 +219,7 @@ try:
     lives = 3
     ammunition = 50
     # Loop principal.
-    while running:
+    while running and lives>0:
         
         # Ajusta a velocidade do jogo.
         clock.tick(FPS)
@@ -349,6 +349,7 @@ try:
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
         
-        
+        if lives==0:
+            running=False        
 finally:
     pygame.quit()
