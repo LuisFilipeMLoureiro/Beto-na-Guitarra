@@ -114,14 +114,14 @@ class Ammo(pygame.sprite.Sprite):
         # Construtor da classe pai (Sprite).
         pygame.sprite.Sprite.__init__(self)
         
-        # Carregando a imagem de fundo.
         self.image = ammo_box
-        self.image=pygame.transform.scale(self.image,(5,5))
-        # Deixando transparente.
+        self.image=pygame.transform.scale(self.image,(20,20))
         self.image.set_colorkey(WHITE)
         # Detalhes sobre o posicionamento.
         self.rect = self.image.get_rect()
-            
+        self.rect.bottom = y
+        self.rect.centerx = x
+           
 # Classe Bullet que representa os tiros
 class Bullet(pygame.sprite.Sprite):
     
@@ -190,8 +190,10 @@ background_rect=background.get_rect()
 
 #Adicionando os grupos das sprites
 all_sprites=pygame.sprite.Group()
+Jogadores=pygame.sprite.Group()
 bullets = pygame.sprite.Group()
 zombies = pygame.sprite.Group()
+ammos = pygame.sprite.Group()
 # Cria os zumbis
 for i in range (10):
     zumbies = Zumbie()
@@ -199,6 +201,7 @@ for i in range (10):
     all_sprites.add(zumbies)
     
 shooter=Shooter()
+Jogadores.add(shooter)
 all_sprites.add(shooter)
 
 try:
@@ -213,6 +216,8 @@ try:
     
     #Definindo variáveis
     score = 0
+    lives = 3
+    ammunition = 50
     # Loop principal.
     while running:
         
@@ -238,10 +243,11 @@ try:
                 if event.key == pygame.K_DOWN: 
                      shooter.speedy += 3
                 # Se for um espaço atira!
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_SPACE and ammunition > 0:
                     bullet = Bullet(shooter.rect.centerx, shooter.rect.centery, bullet_position,SpeedyBull,SpeedxBull)
                     all_sprites.add(bullet)
                     bullets.add(bullet)
+                    ammunition -=1
                     
             # Verifica se soltou alguma tecla.
             if event.type == pygame.KEYUP:
@@ -302,13 +308,20 @@ try:
             all_sprites.add(z)
             zombies.add(z)
             score +=100
-        if hits:
-            am=random.randrange(0,10)
+            am=random.randrange(0,15)
             if am == 1:
-                ammo= Ammo(WIDTH/2,HEIGHT/2)
-        
-        
-        
+                x= Ammo(hit.rect.centerx,hit.rect.centery)
+                ammos.add(x)
+                all_sprites.add(x) 
+        hitz=pygame.sprite.groupcollide(Jogadores, ammos, False, True)
+        for hit in hitz:
+            ammunition +=15
+        gethit=pygame.sprite.groupcollide(Jogadores,zombies, False, True)
+        for hit in gethit:
+            lives -= 1
+            z = Zumbie() 
+            all_sprites.add(z)
+            zombies.add(z)
 
         # A cada loop, redesenha o fundo e os sprites
         all_sprites.update()
@@ -323,8 +336,19 @@ try:
         text_rect.midtop = (WIDTH / 2,  10)
         screen.blit(text_surface, text_rect) 
         
+        text_surface = score_font.render(chr(9829) * lives, True, RED)
+        text_rect = text_surface.get_rect()
+        text_rect.bottomleft = (10, HEIGHT - 10)
+        screen.blit(text_surface, text_rect)
+        
+        text_surface = score_font.render("Ammo:{0}".format(ammunition), True, BLACK)
+        text_rect = text_surface.get_rect()
+        text_rect.bottomleft = (10,  HEIGHT- 35)
+        screen.blit(text_surface, text_rect) 
+        
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
-      
+        
+        
 finally:
     pygame.quit()
