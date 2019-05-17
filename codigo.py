@@ -9,7 +9,9 @@ import time
 import random
 # Estabelece a pasta que contem as figuras.
 img_dir = path.join(path.dirname(__file__), 'imagens')
+fnt_dir = path.join(path.dirname(__file__), 'font')
 
+pygame.font.init()
 # Dados gerais do jogo.
 WIDTH = 846 # Largura da tela
 HEIGHT = 469 # Altura da tela
@@ -25,7 +27,8 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
        
-
+#Criador de Score (fonte)
+score_font = pygame.font.Font(path.join(fnt_dir, "PressStart2P.ttf"), 28)
 
 class Zumbie(pygame.sprite.Sprite):
     
@@ -207,6 +210,9 @@ try:
     all_sprites.draw(screen)
     #Invertendo o display
     pygame.display.flip()
+    
+    #Definindo variáveis
+    score = 0
     # Loop principal.
     while running:
         
@@ -295,20 +301,30 @@ try:
             z = Zumbie() 
             all_sprites.add(z)
             zombies.add(z)
+            score +=100
         if hits:
             am=random.randrange(0,10)
             if am == 1:
                 ammo= Ammo(WIDTH/2,HEIGHT/2)
+        
+        
+        
+
         # A cada loop, redesenha o fundo e os sprites
         all_sprites.update()
         # A cada loop, redesenha o fundo e os sprites
         screen.fill(BLACK)
         screen.blit(background, background_rect)
         all_sprites.draw(screen)
-
+         
+        # Desenha o score
+        text_surface = score_font.render("{:08d}".format(score), True, YELLOW)
+        text_rect = text_surface.get_rect()
+        text_rect.midtop = (WIDTH / 2,  10)
+        screen.blit(text_surface, text_rect) 
         
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
-        
+      
 finally:
     pygame.quit()
