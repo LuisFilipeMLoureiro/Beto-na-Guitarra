@@ -127,7 +127,7 @@ class Medkit(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         
         self.image = kit_img
-        self.image=pygame.transform.scale(self.image,(40,40))
+        self.image=pygame.transform.scale(self.image,(15,18))
         self.image.set_colorkey(WHITE)
         # Detalhes sobre o posicionamento.
         self.rect = self.image.get_rect()
