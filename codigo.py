@@ -121,7 +121,18 @@ class Ammo(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.bottom = y
         self.rect.centerx = x
-           
+        
+class Medkit(pygame.sprite.Sprite):
+    def __init__(self,x, y):
+        pygame.sprite.Sprite.__init__(self)
+        
+        self.image = kit_img
+        self.image=pygame.transform.scale(self.image,(40,40))
+        self.image.set_colorkey(WHITE)
+        # Detalhes sobre o posicionamento.
+        self.rect = self.image.get_rect()
+        self.rect.bottom = y
+        self.rect.centerx = x           
 # Classe Bullet que representa os tiros
 class Bullet(pygame.sprite.Sprite):
     
@@ -173,6 +184,7 @@ bullet_image=pygame.image.load(path.join(img_dir, "balta_teste.png")).convert()
 bullet_image = pygame.transform.scale(bullet_image, (10, 10))        
 bullet_position=bullet_image
 ammo_box=pygame.image.load(path.join(img_dir, "amo_box.png")).convert()
+kit_img=pygame.image.load(path.join(img_dir, "med_kit.png")).convert()
 SpeedyBull=-15
 SpeedxBull=0
 
@@ -194,6 +206,7 @@ Jogadores=pygame.sprite.Group()
 bullets = pygame.sprite.Group()
 zombies = pygame.sprite.Group()
 ammos = pygame.sprite.Group()
+medkits = pygame.sprite.Group()
 # Cria os zumbis
 for i in range (10):
     zumbies = Zumbie()
@@ -308,15 +321,23 @@ try:
             all_sprites.add(z)
             zombies.add(z)
             score +=100
-            am=random.randrange(0,15)
-            if am == 1:
+            am=random.randrange(0,30)
+            if am == 1 or am==10:
                 x= Ammo(hit.rect.centerx,hit.rect.centery)
                 ammos.add(x)
-                all_sprites.add(x) 
+                all_sprites.add(x)
+            if am == 2:
+                m= Medkit(hit.rect.centerx,hit.rect.centery)
+                medkits.add(m)
+                all_sprites.add(m) 
         hitz=pygame.sprite.groupcollide(Jogadores, ammos, False, True)
         for hit in hitz:
             ammunition +=15
         gethit=pygame.sprite.groupcollide(Jogadores,zombies, False, True)
+        hitm1=pygame.sprite.groupcollide(Jogadores, medkits, False, True)
+        for hit in hitm1:
+                lives +=1
+
         for hit in gethit:
             lives -= 1
             z = Zumbie() 
