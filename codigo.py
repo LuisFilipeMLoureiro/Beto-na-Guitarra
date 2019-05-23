@@ -10,6 +10,7 @@ import random
 # Estabelece a pasta que contem as figuras.
 img_dir = path.join(path.dirname(__file__), 'imagens')
 fnt_dir = path.join(path.dirname(__file__), 'font')
+snd_dir = path.join(path.dirname(__file__), 'snd')
 
 pygame.font.init()
 # Dados gerais do jogo.
@@ -173,6 +174,7 @@ class Bullet(pygame.sprite.Sprite):
 
 #Iniciação do Pygame
 pygame.init()
+pygame.mixer.init()
 #Carrega a tela com esse tamanho
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
@@ -187,6 +189,8 @@ ammo_box=pygame.image.load(path.join(img_dir, "amo_box.png")).convert()
 kit_img=pygame.image.load(path.join(img_dir, "med_kit.png")).convert()
 SpeedyBull=-15
 SpeedxBull=0
+pygame.mixer.music.load(path.join(snd_dir, 'Official Opening Credits Game of Thrones (HBO).wav'))
+pygame.mixer.music.set_volume(0.8)
 
 # Nome do jogo
 pygame.display.set_caption("BetoField")
@@ -226,7 +230,7 @@ try:
     all_sprites.draw(screen)
     #Invertendo o display
     pygame.display.flip()
-    
+    pygame.mixer.music.play(loops=-1)
     #Definindo variáveis
     score = 0
     lives = 3
@@ -239,8 +243,7 @@ try:
         
         # Processa os eventos (mouse, teclado, botão, etc).
         for event in pygame.event.get():
-        
-            
+           
             # Verifica se foi fechado
             if event.type == pygame.QUIT:
                 running = False
@@ -337,13 +340,12 @@ try:
         hitm1=pygame.sprite.groupcollide(Jogadores, medkits, False, True)
         for hit in hitm1:
                 lives +=1
+
         for hit in gethit:
-            zs=gethit[hit]
-            for c in zs:
-                lives -= 1
-                z = Zumbie() 
-                all_sprites.add(z)
-                zombies.add(z)
+            lives -= 1
+            z = Zumbie() 
+            all_sprites.add(z)
+            zombies.add(z)
 
         # A cada loop, redesenha o fundo e os sprites
         all_sprites.update()
