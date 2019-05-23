@@ -60,15 +60,33 @@ class Zumbie(pygame.sprite.Sprite):
         
     # Metodo que atualiza a posição da navinha
     def update(self):
-        if shooter.rect.x > self.rect.x:
-            self.rect.x += self.speedx
-        if shooter.rect.x < self.rect.x:
-            self.rect.x -= self.speedx
-        if shooter.rect.y > self.rect.y:
-            self.rect.y += self.speedy
-        if shooter.rect.y < self.rect.y:
-            self.rect.y -= self.speedy
-        
+        if ((shooter.rect.x-self.rect.x)**2+(shooter.rect.y-self.rect.y)**2)**0.5 < ((shooter2.rect.x-self.rect.x)**2+(shooter.rect.y-self.rect.y)**2)**0.5 and lives1 > 0:
+            if shooter.rect.x > self.rect.x:
+                self.rect.x += self.speedx
+            if shooter.rect.x < self.rect.x:
+                self.rect.x -= self.speedx
+            if shooter.rect.y > self.rect.y:
+                self.rect.y += self.speedy
+            if shooter.rect.y < self.rect.y:
+                self.rect.y -= self.speedy
+        elif lives2 > 0:
+            if shooter2.rect.x > self.rect.x:
+                self.rect.x += self.speedx
+            if shooter2.rect.x < self.rect.x:
+                self.rect.x -= self.speedx
+            if shooter2.rect.y > self.rect.y:
+                self.rect.y += self.speedy
+            if shooter2.rect.y < self.rect.y:
+                self.rect.y -= self.speedy
+        else:
+            if shooter.rect.x > self.rect.x:
+                self.rect.x += self.speedx
+            if shooter.rect.x < self.rect.x:
+                self.rect.x -= self.speedx
+            if shooter.rect.y > self.rect.y:
+                self.rect.y += self.speedy
+            if shooter.rect.y < self.rect.y:
+                self.rect.y -= self.speedy
 class Shooter(pygame.sprite.Sprite):
     
     #Construtor
@@ -121,7 +139,6 @@ class Ammo(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.bottom = y
         self.rect.centerx = x
-        
 class Medkit(pygame.sprite.Sprite):
     def __init__(self,x, y):
         pygame.sprite.Sprite.__init__(self)
@@ -183,6 +200,7 @@ mob_Img=mob_img.set_colorkey(WHITE)
 bullet_image=pygame.image.load(path.join(img_dir, "balta_teste.png")).convert()
 bullet_image = pygame.transform.scale(bullet_image, (10, 10))        
 bullet_position=bullet_image
+bullet_position2=bullet_image
 ammo_box=pygame.image.load(path.join(img_dir, "amo_box.png")).convert()
 kit_img=pygame.image.load(path.join(img_dir, "med_kit.png")).convert()
 SpeedyBull=-15
@@ -202,7 +220,8 @@ background_rect=background.get_rect()
 
 #Adicionando os grupos das sprites
 all_sprites=pygame.sprite.Group()
-Jogadores=pygame.sprite.Group()
+Jogadores1=pygame.sprite.Group()
+Jogadores2=pygame.sprite.Group()
 bullets = pygame.sprite.Group()
 zombies = pygame.sprite.Group()
 ammos = pygame.sprite.Group()
@@ -214,9 +233,11 @@ for i in range (10):
     all_sprites.add(zumbies)
     
 shooter=Shooter()
-Jogadores.add(shooter)
+Jogadores1.add(shooter)
 all_sprites.add(shooter)
-
+shooter2=Shooter()
+Jogadores2.add(shooter2)
+all_sprites.add(shooter2)
 try:
     #carregando sprites e cenário para o loop principal
         
@@ -229,10 +250,13 @@ try:
     
     #Definindo variáveis
     score = 0
-    lives = 3
-    ammunition = 50
+    lives1 = 3
+    lives2 = 3
+    ammunition1 = 50
+    ammunition2 = 50
+    jogadores=1
     # Loop principal.
-    while running and lives>0:
+    while running:
         
         # Ajusta a velocidade do jogo.
         clock.tick(FPS)
@@ -255,12 +279,27 @@ try:
                     shooter.speedy -= 3
                 if event.key == pygame.K_DOWN: 
                      shooter.speedy += 3
+                if event.key == pygame.K_a: 
+                    shooter2.speedx -= 3
+                if event.key == pygame.K_d:
+                    shooter2.speedx += 3
+                if event.key == pygame.K_w:
+                    shooter2.speedy -= 3
+                if event.key == pygame.K_s: 
+                     shooter2.speedy += 3
+
                 # Se for um espaço atira!
-                if event.key == pygame.K_SPACE and ammunition > 0:
+                if event.key == pygame.K_SPACE and ammunition1 > 0 and lives1 > 0:
                     bullet = Bullet(shooter.rect.centerx, shooter.rect.centery, bullet_position,SpeedyBull,SpeedxBull)
                     all_sprites.add(bullet)
                     bullets.add(bullet)
-                    ammunition -=1
+                    ammunition1 -=1
+                if event.key == pygame.K_t and ammunition2 > 0 and lives2 > 0:
+                    bullet = Bullet(shooter2.rect.centerx, shooter2.rect.centery, bullet_position2,SpeedyBull,SpeedxBull)
+                    all_sprites.add(bullet)
+                    bullets.add(bullet)
+                    ammunition2 -=1
+
                     
             # Verifica se soltou alguma tecla.
             if event.type == pygame.KEYUP:
@@ -273,6 +312,14 @@ try:
                     shooter.speedy += 3
                 if event.key == pygame.K_DOWN:
                     shooter.speedy -= 3
+                if event.key == pygame.K_a:
+                    shooter2.speedx += 3
+                if event.key == pygame.K_d:
+                    shooter2.speedx -= 3
+                if event.key == pygame.K_w:
+                    shooter2.speedy += 3
+                if event.key == pygame.K_s:
+                    shooter2.speedy -= 3
         if shooter.speedx==0 and shooter.speedy<0:
             shooter.image=pygame.transform.rotate(mob_img,0)
             bullet_position=pygame.transform.rotate(bullet_image,0)
@@ -313,6 +360,54 @@ try:
             bullet_position=pygame.transform.rotate(bullet_image,45)
             SpeedyBull=-15
             SpeedxBull=-15
+            
+            #Diagonal para jogador 2:
+        if shooter2.speedx==0 and shooter2.speedy<0:
+            shooter2.image=pygame.transform.rotate(mob_img,0)
+            bullet_position2=pygame.transform.rotate(bullet_image,0)
+            SpeedyBull=-15
+            SpeedxBull=0
+        if shooter2.speedx>0 and shooter2.speedy<0:
+            shooter2.image=pygame.transform.rotate(mob_img,315)
+            bullet_position2=pygame.transform.rotate(bullet_image,315)
+            SpeedyBull=-15
+            SpeedxBull=15
+        if shooter2.speedx>0 and shooter2.speedy==0:
+            shooter2.image=pygame.transform.rotate(mob_img,270)
+            bullet_position2=pygame.transform.rotate(bullet_image,270)
+            SpeedyBull=0
+            SpeedxBull=15
+        if shooter2.speedx>0 and shooter2.speedy>0:
+            shooter2.image=pygame.transform.rotate(mob_img,225)
+            bullet_position2=pygame.transform.rotate(bullet_image,225)
+            SpeedyBull=15
+            SpeedxBull=15
+        if shooter2.speedx==0 and shooter2.speedy>0:
+            shooter2.image=pygame.transform.rotate(mob_img,180)
+            bullet_position2=pygame.transform.rotate(bullet_image,180)
+            SpeedyBull=15
+            SpeedxBull=0
+        if shooter2.speedx<0 and shooter2.speedy>0:
+            shooter2.image=pygame.transform.rotate(mob_img,135)
+            bullet_position2=pygame.transform.rotate(bullet_image,135)
+            SpeedyBull=15
+            SpeedxBull=-15
+        if shooter2.speedx<0 and shooter2.speedy==0:
+            shooter2.image=pygame.transform.rotate(mob_img,90)
+            bullet_position2=pygame.transform.rotate(bullet_image,90)
+            SpeedyBull=0
+            SpeedxBull=-15
+        if shooter2.speedx<0 and shooter2.speedy<0:
+            shooter2.image=pygame.transform.rotate(mob_img,45)
+            bullet_position2=pygame.transform.rotate(bullet_image,45)
+            SpeedyBull=-15
+            SpeedxBull=-15
+        if lives1==0:
+            shooter.kill()
+        if lives2 == 0:
+            shooter2.kill()
+        if lives1 == 0 and lives2==0:
+            running=False
                  # Se o tiro chegar no zumbie, byebye zumbie
         hits = pygame.sprite.groupcollide(zombies, bullets, True, True)
         for hit in hits: # Pode haver mais de um
@@ -329,17 +424,28 @@ try:
             if am == 2:
                 m= Medkit(hit.rect.centerx,hit.rect.centery)
                 medkits.add(m)
-                all_sprites.add(m) 
-        hitz=pygame.sprite.groupcollide(Jogadores, ammos, False, True)
-        for hit in hitz:
-            ammunition +=15
-        gethit=pygame.sprite.groupcollide(Jogadores,zombies, False, True)
-        hitm1=pygame.sprite.groupcollide(Jogadores, medkits, False, True)
+                all_sprites.add(m)
+        hitz1=pygame.sprite.groupcollide(Jogadores1, ammos, False, True)
+        for hit in hitz1:
+                ammunition1 +=15
+        hitz2=pygame.sprite.groupcollide(Jogadores2, ammos, False, True)
+        for hit in hitz2:
+                ammunition2 +=15
+        hitm1=pygame.sprite.groupcollide(Jogadores1, medkits, False, True)
         for hit in hitm1:
-                lives +=1
-
-        for hit in gethit:
-            lives -= 1
+                lives1 +=1
+        hitm2=pygame.sprite.groupcollide(Jogadores2, medkits, False, True)
+        for hit in hitm2:
+                lives2 +=1
+        gethit1=pygame.sprite.groupcollide(Jogadores1,zombies, False, True)
+        for hit in gethit1:
+            lives1 -= 1
+            z = Zumbie() 
+            all_sprites.add(z)
+            zombies.add(z)
+        gethit2=pygame.sprite.groupcollide(Jogadores2,zombies, False, True)
+        for hit in gethit2:
+            lives2 -= 1
             z = Zumbie() 
             all_sprites.add(z)
             zombies.add(z)
@@ -357,20 +463,30 @@ try:
         text_rect.midtop = (WIDTH / 2,  10)
         screen.blit(text_surface, text_rect) 
         
-        text_surface = score_font.render(chr(9829) * lives, True, RED)
+        text_surface = score_font.render(chr(9829) * lives1, True, RED)
         text_rect = text_surface.get_rect()
         text_rect.bottomleft = (10, HEIGHT - 10)
         screen.blit(text_surface, text_rect)
         
-        text_surface = score_font.render("Ammo:{0}".format(ammunition), True, BLACK)
+        text_surface = score_font.render(chr(9829) * lives2, True, RED)
         text_rect = text_surface.get_rect()
-        text_rect.bottomleft = (10,  HEIGHT- 35)
+        text_rect.bottomright = (WIDTH - 20, HEIGHT - 10)
+        screen.blit(text_surface, text_rect)
+
+        
+        text_surface = score_font.render("Ammo:{0}".format(ammunition1), True, BLACK)
+        text_rect = text_surface.get_rect()
+        text_rect.bottomleft = (20,  HEIGHT- 35)
+        screen.blit(text_surface, text_rect) 
+        
+        text_surface = score_font.render("Ammo:{0}".format(ammunition2), True, BLACK)
+        text_rect = text_surface.get_rect()
+        text_rect.bottomright = (WIDTH - 20,  HEIGHT- 35)
         screen.blit(text_surface, text_rect) 
         
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
         
-        if lives==0:
-            running=False        
+        
 finally:
     pygame.quit()
