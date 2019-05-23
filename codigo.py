@@ -264,6 +264,10 @@ try:
                     all_sprites.add(bullet)
                     bullets.add(bullet)
                     ammunition -=1
+                if event.key == pygame.K_p and lives>1:
+                    lives-=1
+                    ammunition += 15
+
                     
             # Verifica se soltou alguma tecla.
             if event.type == pygame.KEYUP:

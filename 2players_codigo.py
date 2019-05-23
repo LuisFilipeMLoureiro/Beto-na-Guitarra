@@ -297,7 +297,7 @@ try:
                     bullets.add(bullet)
                     ammunition1 -=1
                 if event.key == pygame.K_t and ammunition2 > 0 and lives2 > 0:
-                    bullet = Bullet(shooter2.rect.centerx, shooter2.rect.centery, bullet_position2,SpeedyBull,SpeedxBull)
+                    bullet = Bullet(shooter2.rect.centerx, shooter2.rect.centery, bullet_position2,Speed2yBull,Speed2xBull)
                     all_sprites.add(bullet)
                     bullets.add(bullet)
                     ammunition2 -=1
