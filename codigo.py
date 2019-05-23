@@ -192,6 +192,7 @@ SpeedxBull=0
 pygame.mixer.music.load(path.join(snd_dir, 'Official Opening Credits Game of Thrones (HBO).wav'))
 pygame.mixer.music.set_volume(0.8)
 som_tiro=pygame.mixer.Sound(path.join(snd_dir, 'bang_teste.ogg'))
+som_zumbi_morrendo=pygame.mixer.Sound(path.join(snd_dir, 'zumbi_morrendo.ogg'))
 
 
 # Nome do jogo
@@ -328,6 +329,7 @@ try:
                  # Se o tiro chegar no zumbie, byebye zumbie
         hits = pygame.sprite.groupcollide(zombies, bullets, True, True)
         for hit in hits: # Pode haver mais de um
+            som_zumbi_morrendo.play()
 
             z = Zumbie() 
             all_sprites.add(z)
