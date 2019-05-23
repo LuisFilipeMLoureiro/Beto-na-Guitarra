@@ -205,6 +205,8 @@ ammo_box=pygame.image.load(path.join(img_dir, "amo_box.png")).convert()
 kit_img=pygame.image.load(path.join(img_dir, "med_kit.png")).convert()
 SpeedyBull=-15
 SpeedxBull=0
+Speed2yBull=-15
+Speed2xBull=0
 
 # Nome do jogo
 pygame.display.set_caption("BetoField")
@@ -365,43 +367,43 @@ try:
         if shooter2.speedx==0 and shooter2.speedy<0:
             shooter2.image=pygame.transform.rotate(mob_img,0)
             bullet_position2=pygame.transform.rotate(bullet_image,0)
-            SpeedyBull=-15
-            SpeedxBull=0
+            Speed2yBull=-15
+            Speed2xBull=0
         if shooter2.speedx>0 and shooter2.speedy<0:
             shooter2.image=pygame.transform.rotate(mob_img,315)
             bullet_position2=pygame.transform.rotate(bullet_image,315)
-            SpeedyBull=-15
-            SpeedxBull=15
+            Speed2yBull=-15
+            Speed2xBull=15
         if shooter2.speedx>0 and shooter2.speedy==0:
             shooter2.image=pygame.transform.rotate(mob_img,270)
             bullet_position2=pygame.transform.rotate(bullet_image,270)
-            SpeedyBull=0
-            SpeedxBull=15
+            Speed2yBull=0
+            Speed2xBull=15
         if shooter2.speedx>0 and shooter2.speedy>0:
             shooter2.image=pygame.transform.rotate(mob_img,225)
             bullet_position2=pygame.transform.rotate(bullet_image,225)
-            SpeedyBull=15
-            SpeedxBull=15
+            Speed2yBull=15
+            Speed2xBull=15
         if shooter2.speedx==0 and shooter2.speedy>0:
             shooter2.image=pygame.transform.rotate(mob_img,180)
             bullet_position2=pygame.transform.rotate(bullet_image,180)
-            SpeedyBull=15
-            SpeedxBull=0
+            Speed2yBull=15
+            Speed2xBull=0
         if shooter2.speedx<0 and shooter2.speedy>0:
             shooter2.image=pygame.transform.rotate(mob_img,135)
             bullet_position2=pygame.transform.rotate(bullet_image,135)
-            SpeedyBull=15
-            SpeedxBull=-15
+            Speed2yBull=15
+            Speed2xBull=-15
         if shooter2.speedx<0 and shooter2.speedy==0:
             shooter2.image=pygame.transform.rotate(mob_img,90)
             bullet_position2=pygame.transform.rotate(bullet_image,90)
-            SpeedyBull=0
-            SpeedxBull=-15
+            Speed2yBull=0
+            Speed2xBull=-15
         if shooter2.speedx<0 and shooter2.speedy<0:
             shooter2.image=pygame.transform.rotate(mob_img,45)
             bullet_position2=pygame.transform.rotate(bullet_image,45)
-            SpeedyBull=-15
-            SpeedxBull=-15
+            Speed2yBull=-15
+            Speed2xBull=-15
         if lives1==0:
             shooter.kill()
         if lives2 == 0:
