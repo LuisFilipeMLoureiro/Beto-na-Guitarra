@@ -337,12 +337,13 @@ try:
         hitm1=pygame.sprite.groupcollide(Jogadores, medkits, False, True)
         for hit in hitm1:
                 lives +=1
-
         for hit in gethit:
-            lives -= 1
-            z = Zumbie() 
-            all_sprites.add(z)
-            zombies.add(z)
+            zs=gethit[hit]
+            for c in zs:
+                lives -= 1
+                z = Zumbie() 
+                all_sprites.add(z)
+                zombies.add(z)
 
         # A cada loop, redesenha o fundo e os sprites
         all_sprites.update()
