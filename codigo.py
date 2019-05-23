@@ -191,6 +191,8 @@ SpeedyBull=-15
 SpeedxBull=0
 pygame.mixer.music.load(path.join(snd_dir, 'Official Opening Credits Game of Thrones (HBO).wav'))
 pygame.mixer.music.set_volume(0.8)
+som_tiro=pygame.mixer.Sound(path.join(snd_dir, 'bang_teste.ogg'))
+
 
 # Nome do jogo
 pygame.display.set_caption("BetoField")
@@ -264,9 +266,12 @@ try:
                     all_sprites.add(bullet)
                     bullets.add(bullet)
                     ammunition -=1
+                    som_tiro.play()
+                    
                 if event.key == pygame.K_p and lives>1:
                     lives-=1
                     ammunition += 15
+                    
 
                     
             # Verifica se soltou alguma tecla.
