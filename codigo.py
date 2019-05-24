@@ -383,7 +383,7 @@ def game_1player(screen):
                 zombies.add(z)
                 zs=gethit[hit]
                 for c in zs:
-                    lives -= 1
+                
                     z = Zumbie(shooter) 
                     all_sprites.add(z)
                     zombies.add(z)
