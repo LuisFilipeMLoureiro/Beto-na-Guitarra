@@ -196,6 +196,7 @@ pygame.mixer.music.set_volume(0.8)
 som_tiro=pygame.mixer.Sound(path.join(snd_dir, 'bang2.ogg'))
 som_zumbi_morrendo=pygame.mixer.Sound(path.join(snd_dir, 'zumbi_morrendo.ogg'))
 morte=pygame.mixer.Sound(path.join(snd_dir, 'morte_conv.ogg'))
+vida=pygame.mixer.Sound(path.join(snd_dir, 'vida.ogg'))
 
 
 # Nome do jogo
@@ -354,6 +355,7 @@ try:
         hitm1=pygame.sprite.groupcollide(Jogadores, medkits, False, True)
         for hit in hitm1:
                 lives +=1
+                vida.play()
 
         for hit in gethit:
             morte.play()
