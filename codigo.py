@@ -195,7 +195,9 @@ pygame.mixer.music.load(path.join(snd_dir, 'Official Opening Credits Game of Thr
 pygame.mixer.music.set_volume(0.8)
 som_tiro1=pygame.mixer.Sound(path.join(snd_dir, 'bang2.ogg'))
 som_tiro2=pygame.mixer.Sound(path.join(snd_dir, 'plaa.ogg'))
-som_zumbi_morrendo=pygame.mixer.Sound(path.join(snd_dir, 'zumbi_morrendo.ogg'))
+som_zumbi_morrendo1=pygame.mixer.Sound(path.join(snd_dir, 'zumbi_morrendo.ogg'))
+som_zumbi_morrendo2=pygame.mixer.Sound(path.join(snd_dir, 'som_zm2.ogg'))
+som_zumbi_morrendo3=pygame.mixer.Sound(path.join(snd_dir, 'som_zm3.ogg'))
 morte=pygame.mixer.Sound(path.join(snd_dir, 'morte_conv.ogg'))
 vida=pygame.mixer.Sound(path.join(snd_dir, 'vida.ogg'))
 tictic=pygame.mixer.Sound(path.join(snd_dir, 'tiqtiq.ogg'))
@@ -343,7 +345,15 @@ try:
                  # Se o tiro chegar no zumbie, byebye zumbie
         hits = pygame.sprite.groupcollide(zombies, bullets, True, True)
         for hit in hits: # Pode haver mais de um
-            som_zumbi_morrendo.play()
+            sz=random.randrange(0,40)
+            if sz >= 19 and sz <= 38:
+                som_zumbi_morrendo1.play()
+            if sz < 19:
+                som_zumbi_morrendo2.play()
+            else:
+                som_zumbi_morrendo3.play()
+
+            
 
             z = Zumbie() 
             all_sprites.add(z)
