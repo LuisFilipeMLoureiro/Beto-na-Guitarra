@@ -35,7 +35,7 @@ game_over_font = pygame.font.Font(path.join(fnt_dir, "PressStart2P.ttf"), 20)
 class Zumbie(pygame.sprite.Sprite):
     
     #Construtor
-    def __init__(self):
+    def __init__(self,shooter):
         
         pygame.sprite.Sprite.__init__(self)
         
@@ -70,17 +70,17 @@ class Zumbie(pygame.sprite.Sprite):
         #Definindo velociada do Zumbie
         self.speedx=1
         self.speedy=1
-        
+        self.shooter=shooter
         
     # Metodo que atualiza a posição da navinha
     def update(self):
-        if shooter.rect.x > self.rect.x:
+        if self.shooter.rect.x > self.rect.x:
             self.rect.x += self.speedx
-        if shooter.rect.x < self.rect.x:
+        if self.shooter.rect.x < self.rect.x:
             self.rect.x -= self.speedx
-        if shooter.rect.y > self.rect.y:
+        if self.shooter.rect.y > self.rect.y:
             self.rect.y += self.speedy
-        if shooter.rect.y < self.rect.y:
+        if self.shooter.rect.y < self.rect.y:
             self.rect.y -= self.speedy
         
 class Shooter(pygame.sprite.Sprite):
@@ -89,7 +89,9 @@ class Shooter(pygame.sprite.Sprite):
     def __init__(self):
         
         pygame.sprite.Sprite.__init__(self)
-        
+        mob_img=pygame.image.load(path.join(img_dir, "sold_up.png")).convert()
+        mob_img = pygame.transform.scale(mob_img, (30, 30))        
+        mob_img.set_colorkey(WHITE)
         self.image=mob_img
         
         
@@ -127,7 +129,7 @@ class Ammo(pygame.sprite.Sprite):
         
         # Construtor da classe pai (Sprite).
         pygame.sprite.Sprite.__init__(self)
-        
+        ammo_box=pygame.image.load(path.join(img_dir, "amo_box.png")).convert()
         self.image = ammo_box
         self.image=pygame.transform.scale(self.image,(20,20))
         self.image.set_colorkey(WHITE)
@@ -139,7 +141,7 @@ class Ammo(pygame.sprite.Sprite):
 class Medkit(pygame.sprite.Sprite):
     def __init__(self,x, y):
         pygame.sprite.Sprite.__init__(self)
-        
+        kit_img=pygame.image.load(path.join(img_dir, "med_kit.png")).convert()
         self.image = kit_img
         self.image=pygame.transform.scale(self.image,(15,18))
         self.image.set_colorkey(WHITE)
@@ -155,7 +157,8 @@ class Bullet(pygame.sprite.Sprite):
         
         # Construtor da classe pai (Sprite).
         pygame.sprite.Sprite.__init__(self)
-        
+        bullet_image=pygame.image.load(path.join(img_dir, "balta_teste.png")).convert()
+        bullet_image = pygame.transform.scale(bullet_image, (10, 10))        
         # Carregando a imagem de fundo.
         self.image = bullet_img
 
@@ -184,94 +187,85 @@ class Bullet(pygame.sprite.Sprite):
         if self.rect.left>WIDTH:
             self.kill()
 
-
+SOLO=1
 #Iniciação do Pygame
 pygame.init()
 pygame.mixer.init()
 #Carrega a tela com esse tamanho
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-
-#Assets:
-mob_img=pygame.image.load(path.join(img_dir, "sold_up.png")).convert()
-mob_img = pygame.transform.scale(mob_img, (30, 30))        
-mob_Img=mob_img.set_colorkey(WHITE)
-bullet_image=pygame.image.load(path.join(img_dir, "balta_teste.png")).convert()
-bullet_image = pygame.transform.scale(bullet_image, (10, 10))        
-bullet_position=bullet_image
-ammo_box=pygame.image.load(path.join(img_dir, "amo_box.png")).convert()
-kit_img=pygame.image.load(path.join(img_dir, "med_kit.png")).convert()
-SpeedyBull=-15
-SpeedxBull=0
-
-#sons do jogo:
-pygame.mixer.music.load(path.join(snd_dir, 'Official Opening Credits Game of Thrones (HBO).wav'))
-pygame.mixer.music.set_volume(0.8)
-som_tiro1=pygame.mixer.Sound(path.join(snd_dir, 'bang2.ogg'))
-som_tiro2=pygame.mixer.Sound(path.join(snd_dir, 'plaa.ogg'))
-som_zumbi_morrendo1=pygame.mixer.Sound(path.join(snd_dir, 'zumbi_morrendo.ogg'))
-som_zumbi_morrendo2=pygame.mixer.Sound(path.join(snd_dir, 'som_zm2.ogg'))
-som_zumbi_morrendo3=pygame.mixer.Sound(path.join(snd_dir, 'som_zm3.ogg'))
-morte=pygame.mixer.Sound(path.join(snd_dir, 'morte_conv.ogg'))
-vida=pygame.mixer.Sound(path.join(snd_dir, 'vida.ogg'))
-tictic=pygame.mixer.Sound(path.join(snd_dir, 'tiqtiq.ogg'))
-sad_song=pygame.mixer.Sound(path.join(snd_dir, 'NARUTO FUNK - Sadness and Sorrow (PMM Funk Remix).ogg'))
-
-
-# Nome do jogo
-pygame.display.set_caption("BetoField")
-
-# Variável para o ajuste de velocidade
-clock = pygame.time.Clock()
-
-# Carrega o fundo do jogo
-background = pygame.image.load(path.join(img_dir, "imagem_fundo.png")).convert()
-# Comando para evitar travamentos.
-background_rect=background.get_rect()
-
-
-#Adicionando os grupos das sprites
-all_sprites=pygame.sprite.Group()
-Jogadores=pygame.sprite.Group()
-bullets = pygame.sprite.Group()
-zombies = pygame.sprite.Group()
-ammos = pygame.sprite.Group()
-medkits = pygame.sprite.Group()
-# Cria os zumbis
-for i in range (10):
-    zumbies = Zumbie()
-    zombies.add(zumbies)
-    all_sprites.add(zumbies)
+def game_1player(screen):
+    state=SOLO
+    #Assets:
+    mob_img=pygame.image.load(path.join(img_dir, "sold_up.png")).convert()
+    mob_img = pygame.transform.scale(mob_img, (30, 30))        
+    mob_img.set_colorkey(WHITE)
+    bullet_image=pygame.image.load(path.join(img_dir, "balta_teste.png")).convert()
+    bullet_image = pygame.transform.scale(bullet_image, (10, 10))        
+    bullet_position=bullet_image
+    SpeedyBull=-15
+    SpeedxBull=0
     
-shooter=Shooter()
-Jogadores.add(shooter)
-all_sprites.add(shooter)
-
-try:
-    #carregando sprites e cenário para o loop principal
+    #sons do jogo:
+    pygame.mixer.music.load(path.join(snd_dir, 'Official Opening Credits Game of Thrones (HBO).wav'))
+    pygame.mixer.music.set_volume(0.8)
+    som_tiro1=pygame.mixer.Sound(path.join(snd_dir, 'bang2.ogg'))
+    som_tiro2=pygame.mixer.Sound(path.join(snd_dir, 'plaa.ogg'))
+    som_zumbi_morrendo1=pygame.mixer.Sound(path.join(snd_dir, 'zumbi_morrendo.ogg'))
+    som_zumbi_morrendo2=pygame.mixer.Sound(path.join(snd_dir, 'som_zm2.ogg'))
+    som_zumbi_morrendo3=pygame.mixer.Sound(path.join(snd_dir, 'som_zm3.ogg'))
+    morte=pygame.mixer.Sound(path.join(snd_dir, 'morte_conv.ogg'))
+    vida=pygame.mixer.Sound(path.join(snd_dir, 'vida.ogg'))
+    tictic=pygame.mixer.Sound(path.join(snd_dir, 'tiqtiq.ogg'))
+    sad_song=pygame.mixer.Sound(path.join(snd_dir, 'NARUTO FUNK - Sadness and Sorrow (PMM Funk Remix).ogg'))
+    
+    
+    # Nome do jogo
+    pygame.display.set_caption("BetoField")
+    
+    # Variável para o ajuste de velocidade
+    clock = pygame.time.Clock()
+    
+    # Carrega o fundo do jogo
+    background = pygame.image.load(path.join(img_dir, "imagem_fundo.png")).convert()
+    # Comando para evitar travamentos.
+    background_rect=background.get_rect()
+    
+    
+    #Adicionando os grupos das sprites
+    all_sprites=pygame.sprite.Group()
+    Jogadores=pygame.sprite.Group()
+    bullets = pygame.sprite.Group()
+    zombies = pygame.sprite.Group()
+    ammos = pygame.sprite.Group()
+    medkits = pygame.sprite.Group()
+    
+    shooter=Shooter()
+    Jogadores.add(shooter)
+    all_sprites.add(shooter)
+    # Cria os zumbis
+    for i in range (10):
+        zumbies = Zumbie(shooter)
+        zombies.add(zumbies)
+        all_sprites.add(zumbies)
+            #carregando sprites e cenário para o loop principal
     game_over=False
-    running = True
     screen.fill(BLACK)
     screen.blit(background, background_rect)
     all_sprites.draw(screen)
     #Invertendo o display
     pygame.display.flip()
     pygame.mixer.music.play(loops=-1)
-    #Definindo variáveis
     score = 0
     lives = 3
     ammunition = 50
-    # Loop principal.
-    while running:
-        
+    while state==SOLO:
         # Ajusta a velocidade do jogo.
         clock.tick(FPS)
-        
         # Processa os eventos (mouse, teclado, botão, etc).
         for event in pygame.event.get():
-           
             # Verifica se foi fechado
             if event.type == pygame.QUIT:
-                running = False
+                pygame.quit()
          # Verifica se apertou alguma tecla.
             if event.type == pygame.KEYDOWN:
                 # Dependendo da tecla, altera a velocidade.
@@ -295,10 +289,6 @@ try:
                         som_tiro1.play()
                     else:
                         som_tiro2.play()
-
-
-                    
-                    
                 if event.key == pygame.K_p and lives>1:
                     lives-=1
                     ammunition += 15
@@ -394,7 +384,7 @@ try:
         for hit in gethit:
             morte.play()
             lives -= 1
-            z = Zumbie() 
+            z = Zumbie(shooter) 
             all_sprites.add(z)
             zombies.add(z)
 
@@ -436,14 +426,10 @@ try:
             sad_song.play()
             
             if event.key == pygame.K_SPACE:
-                running=False
-            
-            #Comando para caso o jogador pressione enter vá para menu
-            #menu ainda está inacabado
-            
-
-        
-        # Depois de desenhar tudo, inverte o display.
+                state==MENU
         pygame.display.flip()
+    return(state)
+try:
+    game_1player(screen)
 finally:
     pygame.quit()
