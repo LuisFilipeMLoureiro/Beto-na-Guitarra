@@ -189,10 +189,13 @@ ammo_box=pygame.image.load(path.join(img_dir, "amo_box.png")).convert()
 kit_img=pygame.image.load(path.join(img_dir, "med_kit.png")).convert()
 SpeedyBull=-15
 SpeedxBull=0
+
+#sons do jogo:
 pygame.mixer.music.load(path.join(snd_dir, 'Official Opening Credits Game of Thrones (HBO).wav'))
 pygame.mixer.music.set_volume(0.8)
 som_tiro=pygame.mixer.Sound(path.join(snd_dir, 'bang2.ogg'))
 som_zumbi_morrendo=pygame.mixer.Sound(path.join(snd_dir, 'zumbi_morrendo.ogg'))
+morte=pygame.mixer.Sound(path.join(snd_dir, 'morte_conv.ogg'))
 
 
 # Nome do jogo
@@ -353,6 +356,7 @@ try:
                 lives +=1
 
         for hit in gethit:
+            morte.play()
             lives -= 1
             z = Zumbie() 
             all_sprites.add(z)
