@@ -186,8 +186,6 @@ class Bullet(pygame.sprite.Sprite):
             self.kill()
         if self.rect.left>WIDTH:
             self.kill()
-
-SOLO=1
 #Iniciação do Pygame
 pygame.init()
 pygame.mixer.init()
@@ -429,7 +427,3 @@ def game_1player(screen):
                 state==MENU
         pygame.display.flip()
     return(state)
-try:
-    game_1player(screen)
-finally:
-    pygame.quit()
