@@ -123,6 +123,27 @@ class Shooter(pygame.sprite.Sprite):
             self.rect.top= 0
         if self.rect.bottom >= HEIGHT:
             self.rect.bottom = HEIGHT
+
+class Walls(pygame.sprite.Sprite):
+    
+    #Construtor
+    def __init__(self,x,y,d):
+        
+        pygame.sprite.Sprite.__init__(self)
+        
+        #WALL
+        parede_ft=pygame.image.load(path.join(img_dir, "parede.png")).convert()
+        self.image=parede_ft
+        self.image=pygame.transform.scale(self.image,(d,d))
+        self.rect=self.image.get_rect()
+        
+        #Centraliza na tela.
+        self.rect.centerx = x
+        self.rect.centery = y
+
+        # Deixando transparente.
+        self.image.set_colorkey(WHITE)
+
 class Ammo(pygame.sprite.Sprite):
     # Construtor da classe.
     def __init__(self, x, y):
@@ -148,7 +169,8 @@ class Medkit(pygame.sprite.Sprite):
         # Detalhes sobre o posicionamento.
         self.rect = self.image.get_rect()
         self.rect.bottom = y
-        self.rect.centerx = x           
+        self.rect.centerx = x  
+
 # Classe Bullet que representa os tiros
 class Bullet(pygame.sprite.Sprite):
     
@@ -238,6 +260,22 @@ def game_1player(screen):
     zombies = pygame.sprite.Group()
     ammos = pygame.sprite.Group()
     medkits = pygame.sprite.Group()
+    walls = pygame.sprite.Group()
+
+    #walls
+    wall=Walls(415,221,54)
+    wall2=Walls(442,252,28)
+    wall3=Walls(227,316,54)
+    wall4=Walls(257,346,28)
+    walls.add(wall2)
+    walls.add(wall)
+    walls.add(wall3)
+    walls.add(wall4)
+    all_sprites.add(wall)
+    all_sprites.add(wall2)
+    all_sprites.add(wall3)
+    all_sprites.add(wall4)
+
     
     shooter=Shooter()
     Jogadores.add(shooter)
@@ -383,13 +421,47 @@ def game_1player(screen):
                 zombies.add(z)
                 zs=gethit[hit]
                 for c in zs:
-                
+
                     z = Zumbie(shooter) 
                     all_sprites.add(z)
                     zombies.add(z)
 
         # A cada loop, redesenha o fundo e os sprites
         all_sprites.update()
+
+        #parede para o shooter
+        hit_wallx = pygame.sprite.spritecollide(shooter, walls, False)
+        for hit in hit_wallx:
+            if shooter.speedx > 0:
+                        shooter.rect.right = hit.rect.left 
+            if shooter.speedx < 0:
+                        shooter.rect.left = hit.rect.right
+
+        hit_wally = pygame.sprite.spritecollide(shooter, walls, False)
+        for hit in hit_wally:
+            if shooter.speedy < 0:
+                        shooter.rect.top = hit.rect.bottom
+            if shooter.speedy > 0:
+                        shooter.rect.bottom = hit.rect.top
+
+        #parede para o zombie
+        for c in zombies:
+            hit_wallx = pygame.sprite.spritecollide(c, walls, False)
+            for hit in hit_wallx:
+                if c.speedx > 0:
+                            c.rect.right = hit.rect.left 
+                if c.speedx < 0:
+                            c.rect.left = hit.rect.right
+          
+            hit_wally = pygame.sprite.spritecollide(c, walls, False)
+            for hit in hit_wally:
+                if c.speedy < 0:
+                            c.rect.top = hit.rect.bottom
+                if c.speedy > 0:
+                            c.rect.bottom = hit.rect.top
+
+
+
         # A cada loop, redesenha o fundo e os sprites
         screen.fill(BLACK)
         screen.blit(background, background_rect)
