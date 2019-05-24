@@ -191,6 +191,8 @@ pygame.init()
 pygame.mixer.init()
 #Carrega a tela com esse tamanho
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
+SOLO=0
+state=1
 def game_1player(screen):
     state=SOLO
     #Assets:
@@ -344,19 +346,13 @@ def game_1player(screen):
             bullet_position=pygame.transform.rotate(bullet_image,45)
             SpeedyBull=-15
             SpeedxBull=-15
-                 # Se o tiro chegar no zumbie, byebye zumbie
+        # Se o tiro chegar no zumbie, byebye zumbie
         hits = pygame.sprite.groupcollide(zombies, bullets, True, True)
         if game_over == False:
             for hit in hits: # Pode haver mais de um
-                sz=random.randrange(0,40)
-                if sz >= 19 and sz <= 38:
-                    som_zumbi_morrendo1.play()
-                if sz < 19:
-                    som_zumbi_morrendo2.play()
-                if sz > 38:
-                    som_zumbi_morrendo3.play()
 
-                z = Zumbie() 
+
+                z = Zumbie(shooter) 
                 all_sprites.add(z)
                 zombies.add(z)
                 score +=100
@@ -378,13 +374,19 @@ def game_1player(screen):
         for hit in hitm1:
                 lives +=1
                 vida.play()
-
-        for hit in gethit:
-            morte.play()
-            lives -= 1
-            z = Zumbie(shooter) 
-            all_sprites.add(z)
-            zombies.add(z)
+        if game_over == False:
+            for hit in gethit:
+                morte.play()
+                lives -= 1
+                z = Zumbie(shooter) 
+                all_sprites.add(z)
+                zombies.add(z)
+                zs=gethit[hit]
+                for c in zs:
+                    lives -= 1
+                    z = Zumbie(shooter) 
+                    all_sprites.add(z)
+                    zombies.add(z)
 
         # A cada loop, redesenha o fundo e os sprites
         all_sprites.update()
@@ -422,8 +424,12 @@ def game_1player(screen):
             text_rect.bottomleft = ((WIDTH/2) - 400,  HEIGHT/2 +120)
             screen.blit(text_surface, text_rect)
             sad_song.play()
-            
-            if event.key == pygame.K_SPACE:
-                state==MENU
+            if event.type==pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    state==MENU
         pygame.display.flip()
     return(state)
+try:
+    game_1player(screen)
+finally:
+    pygame.quit()

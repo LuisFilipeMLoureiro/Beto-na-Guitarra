@@ -10,6 +10,7 @@ import random
 # Estabelece a pasta que contem as figuras.
 img_dir = path.join(path.dirname(__file__), 'imagens')
 fnt_dir = path.join(path.dirname(__file__), 'font')
+snd_dir = path.join(path.dirname(__file__), 'snd')
 
 pygame.font.init()
 # Dados gerais do jogo.
@@ -27,8 +28,10 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
        
+
 #Criador de Score (fonte)
 score_font = pygame.font.Font(path.join(fnt_dir, "PressStart2P.ttf"), 28)
+game_over_font = pygame.font.Font(path.join(fnt_dir, "PressStart2P.ttf"), 20)
 
 class Zumbie(pygame.sprite.Sprite):
     
@@ -47,12 +50,22 @@ class Zumbie(pygame.sprite.Sprite):
         
         #Deixando Transparente
         self.image.set_colorkey(BLACK)
+        #Definindo posição do zumbie como aleatório
+        LADO=random.randint(1,4)
         
         #Definindo posição do zumbie como aleatório
-        self.rect.x=random.randrange(WIDTH- self.rect.width)
-        self.rect.bottom=random.randrange(-100,-40)
-        self.rect.y=random.randrange(HEIGHT- self.rect.height)
-        self.rect.bottom=random.randrange(-100,-40)
+        if LADO == 1:
+            self.rect.bottom=random.randrange(0,HEIGHT)
+            self.rect.right=random.randrange(-40,0)
+        elif LADO ==2:
+            self.rect.right=random.randrange(0,WIDTH)
+            self.rect.bottom=random.randrange(-40,0)
+        elif LADO ==3:
+            self.rect.left=random.randrange(WIDTH,WIDTH + 40)
+            self.rect.bottom=random.randrange(0,HEIGHT)
+        elif LADO ==4:
+            self.rect.left=random.randrange(0,WIDTH + 40)
+            self.rect.bottom=random.randrange(HEIGHT, HEIGHT + 40)
         #Definindo velociada do Zumbie
         self.speedx=1
         self.speedy=1
@@ -211,6 +224,15 @@ def game_2player(screen):
     SpeedxBull=0
     Speed2yBull=-15
     Speed2xBull=0
+    #sons do jogo:
+    pygame.mixer.music.load(path.join(snd_dir, 'Official Opening Credits Game of Thrones (HBO).wav'))
+    pygame.mixer.music.set_volume(0.8)
+    som_tiro1=pygame.mixer.Sound(path.join(snd_dir, 'bang2.ogg'))
+    som_tiro2=pygame.mixer.Sound(path.join(snd_dir, 'plaa.ogg'))
+    morte=pygame.mixer.Sound(path.join(snd_dir, 'morte_conv.ogg'))
+    vida=pygame.mixer.Sound(path.join(snd_dir, 'vida.ogg'))
+    tictic=pygame.mixer.Sound(path.join(snd_dir, 'tiqtiq.ogg'))
+    sad_song=pygame.mixer.Sound(path.join(snd_dir, 'NARUTO FUNK - Sadness and Sorrow (PMM Funk Remix).ogg'))
     
     # Nome do jogo
     pygame.display.set_caption("BetoField")
@@ -256,7 +278,7 @@ def game_2player(screen):
     all_sprites.draw(screen)
         #Invertendo o display
     pygame.display.flip()
-        
+    pygame.mixer.music.play(loops=-1)
         # Loop principal.
     while state==DUO:
         
@@ -296,13 +318,25 @@ def game_2player(screen):
                     all_sprites.add(bullet)
                     bullets.add(bullet)
                     ammunition1 -=1
+                    #sorteia o som do tiro
+                    sm=random.randrange(0,40)
+                    if sm >= 20:
+                        som_tiro1.play()
+                    else:
+                        som_tiro2.play()
+                
                 if event.key == pygame.K_t and ammunition2 > 0 and lives2 > 0:
                     bullet = Bullet(shooter2.rect.centerx, shooter2.rect.centery, bullet_position2,Speed2yBull,Speed2xBull)
                     all_sprites.add(bullet)
                     bullets.add(bullet)
                     ammunition2 -=1
+                    sm=random.randrange(0,40)
+                    if sm >= 20:
+                        som_tiro1.play()
+                    else:
+                        som_tiro2.play()
 
-                    
+                         
             # Verifica se soltou alguma tecla.
             if event.type == pygame.KEYUP:
                 # Dependendo da tecla, altera a velocidade.
@@ -410,52 +444,76 @@ def game_2player(screen):
             shooter2.kill()
         if lives1 == 0 and lives2==0:
             game_over=True
-                 # Se o tiro chegar no zumbie, byebye zumbie
+        # Se o tiro chegar no zumbie, byebye zumbie
         hits = pygame.sprite.groupcollide(zombies, bullets, True, True)
-        for hit in hits: # Pode haver mais de um
+        if game_over == False:
+            for hit in hits: # Pode haver mais de um
 
-            z = Zumbie(shooter,shooter2,lives1,lives2) 
-            all_sprites.add(z)
-            zombies.add(z)
-            score +=100
-            am=random.randrange(0,30)
-            if am == 1 or am==10:
-                x= Ammo(hit.rect.centerx,hit.rect.centery)
-                ammos.add(x)
-                all_sprites.add(x)
-            if am == 2:
-                m= Medkit(hit.rect.centerx,hit.rect.centery)
-                medkits.add(m)
-                all_sprites.add(m)
+                z = Zumbie(shooter,shooter2,lives1,lives2) 
+                all_sprites.add(z)
+                zombies.add(z)
+                score +=100
+                am=random.randrange(0,30)
+                if am == 1 or am==10:
+                    x= Ammo(hit.rect.centerx,hit.rect.centery)
+                    ammos.add(x)
+                    all_sprites.add(x)
+                if am == 2:
+                    m= Medkit(hit.rect.centerx,hit.rect.centery)
+                    medkits.add(m)
+                    all_sprites.add(m)
         hitz1=pygame.sprite.groupcollide(Jogadores1, ammos, False, True)
         for hit in hitz1:
                 ammunition1 +=15
+                tictic.play()
         hitz2=pygame.sprite.groupcollide(Jogadores2, ammos, False, True)
         for hit in hitz2:
                 ammunition2 +=15
+                tictic.play()
         hitm1=pygame.sprite.groupcollide(Jogadores1, medkits, False, True)
         for hit in hitm1:
                 lives1 +=1
+                vida.play()
         hitm2=pygame.sprite.groupcollide(Jogadores2, medkits, False, True)
         for hit in hitm2:
                 lives2 +=1
+                vida.play()
         gethit1=pygame.sprite.groupcollide(Jogadores1,zombies, False, True)
-        for hit in gethit1:
-            lives1 -= 1
-            z = Zumbie(shooter,shooter2,lives1,lives2) 
-            all_sprites.add(z)
-            zombies.add(z)
+        
+        if game_over == False:
+            for hit in gethit1:
+                lives1 -= 1
+                z = Zumbie(shooter,shooter2,lives1,lives2) 
+                all_sprites.add(z)
+                zombies.add(z)
+                morte.play()
+                zs=gethit1[hit]
+                for c in zs:
+                    lives1 -= 1
+                    z = Zumbie(shooter,shooter2,lives1,lives2) 
+                    all_sprites.add(z)
+                    zombies.add(z)
+
         gethit2=pygame.sprite.groupcollide(Jogadores2,zombies, False, True)
-        for hit in gethit2:
-            lives2 -= 1
-            z = Zumbie(shooter,shooter2,lives1,lives2) 
-            all_sprites.add(z)
-            zombies.add(z)
+        
+        if game_over == False:
+            for hit in gethit2:
+                lives2 -= 1
+                z = Zumbie(shooter,shooter2,lives1,lives2) 
+                all_sprites.add(z)
+                zombies.add(z)
+                morte.play()
+                zs=gethit2[hit]
+                for c in zs:
+                    lives1 -= 1
+                    z = Zumbie(shooter,shooter2,lives1,lives2) 
+                    all_sprites.add(z)
+                    zombies.add(z)
 
         # A cada loop, redesenha o fundo e os sprites
         all_sprites.update()
         # A cada loop, redesenha o fundo e os sprites
-        screen.fill(BLACK)
+        
         screen.blit(background, background_rect)
         all_sprites.draw(screen)
          
@@ -486,6 +544,21 @@ def game_2player(screen):
         text_rect.bottomright = (WIDTH - 20,  HEIGHT- 35)
         screen.blit(text_surface, text_rect) 
         
+        if lives1<=0 and lives2<=0:
+            game_over=True
+            text_surface = score_font.render("GAME OVER", True, BLACK)
+            text_rect = text_surface.get_rect()
+            text_rect.bottomleft = ((WIDTH/2) - 140,  HEIGHT/2-20)
+            screen.blit(text_surface, text_rect)
+            
+            text_surface =game_over_font.render("PRESSIONE ENTER PARA VOLTAR AO MENU", True, BLACK)
+            text_rect = text_surface.get_rect()
+            text_rect.bottomleft = ((WIDTH/2) - 400,  HEIGHT/2 +120)
+            screen.blit(text_surface, text_rect)
+            sad_song.play()
+            if event.type==pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    state==MENU
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
     return(state)
