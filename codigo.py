@@ -216,7 +216,7 @@ def game_1player(screen):
     morte=pygame.mixer.Sound(path.join(snd_dir, 'morte_conv.ogg'))
     vida=pygame.mixer.Sound(path.join(snd_dir, 'vida.ogg'))
     tictic=pygame.mixer.Sound(path.join(snd_dir, 'tiqtiq.ogg'))
-    sad_song=pygame.mixer.Sound(path.join(snd_dir,  'NARUTO FUNK - Sadness and Sorrow (PMM Funk Remix).ogg'))
+    sad_song=pygame.mixer.Sound(path.join(snd_dir,  'naruto_musica.ogg'))
     
     
     # Nome do jogo
