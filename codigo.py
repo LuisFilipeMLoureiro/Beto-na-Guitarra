@@ -50,10 +50,22 @@ class Zumbie(pygame.sprite.Sprite):
         self.image.set_colorkey(BLACK)
         
         #Definindo posição do zumbie como aleatório
-        self.rect.x=random.randrange(WIDTH- self.rect.width)
-        self.rect.bottom=random.randrange(-100,-40)
-        self.rect.y=random.randrange(HEIGHT- self.rect.height)
-        self.rect.bottom=random.randrange(-100,-40)
+        LADO=random.randint(1,4)
+        
+        if LADO == 1:
+            self.rect.bottom=random.randrange(0,HEIGHT)
+            self.rect.right=random.randrange(-40,0)
+        elif LADO ==2:
+            self.rect.right=random.randrange(0,WIDTH)
+            self.rect.bottom=random.randrange(-40,0)
+        elif LADO ==3:
+            self.rect.left=random.randrange(WIDTH,WIDTH + 40)
+            self.rect.bottom=random.randrange(0,HEIGHT)
+        elif LADO ==4:
+            self.rect.left=random.randrange(0,WIDTH)
+            self.rect.bottom=random.randrange(HEIGHT, HEIGHT + 40)
+        
+        
         #Definindo velociada do Zumbie
         self.speedx=1
         self.speedy=1
