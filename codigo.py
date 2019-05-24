@@ -214,6 +214,7 @@ som_zumbi_morrendo3=pygame.mixer.Sound(path.join(snd_dir, 'som_zm3.ogg'))
 morte=pygame.mixer.Sound(path.join(snd_dir, 'morte_conv.ogg'))
 vida=pygame.mixer.Sound(path.join(snd_dir, 'vida.ogg'))
 tictic=pygame.mixer.Sound(path.join(snd_dir, 'tiqtiq.ogg'))
+sad_song=pygame.mixer.Sound(path.join(snd_dir, 'NARUTO FUNK - Sadness and Sorrow (PMM Funk Remix).ogg'))
 
 
 # Nome do jogo
@@ -432,6 +433,7 @@ try:
             text_rect = text_surface.get_rect()
             text_rect.bottomleft = ((WIDTH/2) - 400,  HEIGHT/2 +120)
             screen.blit(text_surface, text_rect)
+            sad_song.play()
             
             if event.key == pygame.K_SPACE:
                 running=False
