@@ -30,6 +30,7 @@ YELLOW = (255, 255, 0)
        
 #Criador de Score (fonte)
 score_font = pygame.font.Font(path.join(fnt_dir, "PressStart2P.ttf"), 28)
+game_over_font = pygame.font.Font(path.join(fnt_dir, "PressStart2P.ttf"), 20)
 
 class Zumbie(pygame.sprite.Sprite):
     
@@ -246,7 +247,7 @@ all_sprites.add(shooter)
 
 try:
     #carregando sprites e cenário para o loop principal
-        
+    game_over=False
     running = True
     screen.fill(BLACK)
     screen.blit(background, background_rect)
@@ -259,7 +260,7 @@ try:
     lives = 3
     ammunition = 50
     # Loop principal.
-    while running and lives>0:
+    while running:
         
         # Ajusta a velocidade do jogo.
         clock.tick(FPS)
@@ -356,30 +357,29 @@ try:
             SpeedxBull=-15
                  # Se o tiro chegar no zumbie, byebye zumbie
         hits = pygame.sprite.groupcollide(zombies, bullets, True, True)
-        for hit in hits: # Pode haver mais de um
-            sz=random.randrange(0,40)
-            if sz >= 19 and sz <= 38:
-                som_zumbi_morrendo1.play()
-            if sz < 19:
-                som_zumbi_morrendo2.play()
-            if sz > 38:
-                som_zumbi_morrendo3.play()
+        if game_over == False:
+            for hit in hits: # Pode haver mais de um
+                sz=random.randrange(0,40)
+                if sz >= 19 and sz <= 38:
+                    som_zumbi_morrendo1.play()
+                if sz < 19:
+                    som_zumbi_morrendo2.play()
+                if sz > 38:
+                    som_zumbi_morrendo3.play()
 
-            
-
-            z = Zumbie() 
-            all_sprites.add(z)
-            zombies.add(z)
-            score +=100
-            am=random.randrange(0,30)
-            if am == 1 or am==10:
-                x= Ammo(hit.rect.centerx,hit.rect.centery)
-                ammos.add(x)
-                all_sprites.add(x)
-            if am == 2:
-                m= Medkit(hit.rect.centerx,hit.rect.centery)
-                medkits.add(m)
-                all_sprites.add(m) 
+                z = Zumbie() 
+                all_sprites.add(z)
+                zombies.add(z)
+                score +=100
+                am=random.randrange(0,30)
+                if am == 1 or am==10:
+                    x= Ammo(hit.rect.centerx,hit.rect.centery)
+                    ammos.add(x)
+                    all_sprites.add(x)
+                if am == 2:
+                    m= Medkit(hit.rect.centerx,hit.rect.centery)
+                    medkits.add(m)
+                    all_sprites.add(m) 
         hitz=pygame.sprite.groupcollide(Jogadores, ammos, False, True)
         for hit in hitz:
             ammunition +=15
@@ -419,11 +419,29 @@ try:
         text_rect = text_surface.get_rect()
         text_rect.bottomleft = (10,  HEIGHT- 35)
         screen.blit(text_surface, text_rect) 
+
+        
+        if lives<=0:
+            game_over=True
+            text_surface = score_font.render("GAME OVER", True, BLACK)
+            text_rect = text_surface.get_rect()
+            text_rect.bottomleft = ((WIDTH/2) - 140,  HEIGHT/2-20)
+            screen.blit(text_surface, text_rect)
+            
+            text_surface =game_over_font.render("PRESSIONE ENTER PARA VOLTAR AO MENU", True, BLACK)
+            text_rect = text_surface.get_rect()
+            text_rect.bottomleft = ((WIDTH/2) - 400,  HEIGHT/2 +120)
+            screen.blit(text_surface, text_rect)
+            
+            if event.key == pygame.K_SPACE:
+                running=False
+            
+            #Comando para caso o jogador pressione enter vá para menu
+            #menu ainda está inacabado
+            
+
         
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
-        
-        if lives==0:
-            running=False        
 finally:
     pygame.quit()
