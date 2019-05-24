@@ -62,7 +62,7 @@ class Zumbie(pygame.sprite.Sprite):
             self.rect.left=random.randrange(WIDTH,WIDTH + 40)
             self.rect.bottom=random.randrange(0,HEIGHT)
         elif LADO ==4:
-            self.rect.left=random.randrange(0,WIDTH)
+            self.rect.left=random.randrange(0,WIDTH + 40)
             self.rect.bottom=random.randrange(HEIGHT, HEIGHT + 40)
         
         
@@ -203,7 +203,7 @@ SpeedyBull=-15
 SpeedxBull=0
 
 #sons do jogo:
-pygame.mixer.music.load(path.join(snd_dir, 'hino_URSS.ogg'))
+pygame.mixer.music.load(path.join(snd_dir, 'Official Opening Credits Game of Thrones (HBO).wav'))
 pygame.mixer.music.set_volume(0.25)
 som_tiro1=pygame.mixer.Sound(path.join(snd_dir, 'bang2.ogg'))
 som_tiro2=pygame.mixer.Sound(path.join(snd_dir, 'plaa.ogg'))
