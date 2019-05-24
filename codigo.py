@@ -193,10 +193,12 @@ SpeedxBull=0
 #sons do jogo:
 pygame.mixer.music.load(path.join(snd_dir, 'Official Opening Credits Game of Thrones (HBO).wav'))
 pygame.mixer.music.set_volume(0.8)
-som_tiro=pygame.mixer.Sound(path.join(snd_dir, 'bang2.ogg'))
+som_tiro1=pygame.mixer.Sound(path.join(snd_dir, 'bang2.ogg'))
+som_tiro2=pygame.mixer.Sound(path.join(snd_dir, 'plaa.ogg'))
 som_zumbi_morrendo=pygame.mixer.Sound(path.join(snd_dir, 'zumbi_morrendo.ogg'))
 morte=pygame.mixer.Sound(path.join(snd_dir, 'morte_conv.ogg'))
 vida=pygame.mixer.Sound(path.join(snd_dir, 'vida.ogg'))
+tictic=pygame.mixer.Sound(path.join(snd_dir, 'tiqtiq.ogg'))
 
 
 # Nome do jogo
@@ -271,7 +273,15 @@ try:
                     all_sprites.add(bullet)
                     bullets.add(bullet)
                     ammunition -=1
-                    som_tiro.play()
+                    #sorteia o som do tiro
+                    sm=random.randrange(0,40)
+                    if sm >= 20:
+                        som_tiro1.play()
+                    else:
+                        som_tiro2.play()
+
+
+                    
                     
                 if event.key == pygame.K_p and lives>1:
                     lives-=1
@@ -351,6 +361,7 @@ try:
         hitz=pygame.sprite.groupcollide(Jogadores, ammos, False, True)
         for hit in hitz:
             ammunition +=15
+            tictic.play()
         gethit=pygame.sprite.groupcollide(Jogadores,zombies, False, True)
         hitm1=pygame.sprite.groupcollide(Jogadores, medkits, False, True)
         for hit in hitm1:
