@@ -191,7 +191,7 @@ SpeedyBull=-15
 SpeedxBull=0
 pygame.mixer.music.load(path.join(snd_dir, 'Official Opening Credits Game of Thrones (HBO).wav'))
 pygame.mixer.music.set_volume(0.8)
-som_tiro=pygame.mixer.Sound(path.join(snd_dir, 'bang_teste.ogg'))
+som_tiro=pygame.mixer.Sound(path.join(snd_dir, 'bang2.ogg'))
 som_zumbi_morrendo=pygame.mixer.Sound(path.join(snd_dir, 'zumbi_morrendo.ogg'))
 
 
