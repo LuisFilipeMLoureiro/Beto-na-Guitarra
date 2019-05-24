@@ -204,7 +204,7 @@ SpeedxBull=0
 
 #sons do jogo:
 pygame.mixer.music.load(path.join(snd_dir, 'Official Opening Credits Game of Thrones (HBO).wav'))
-pygame.mixer.music.set_volume(0.25)
+pygame.mixer.music.set_volume(0.8)
 som_tiro1=pygame.mixer.Sound(path.join(snd_dir, 'bang2.ogg'))
 som_tiro2=pygame.mixer.Sound(path.join(snd_dir, 'plaa.ogg'))
 som_zumbi_morrendo1=pygame.mixer.Sound(path.join(snd_dir, 'zumbi_morrendo.ogg'))
