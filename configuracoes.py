@@ -11,7 +11,7 @@ import random
 pygame.init()   
 pygame.font.init()
 QUIT=3
-INIT=0
+INIT=10
 SOLO=1
 DUO=2
 WIDTH = 846 # Largura da tela
@@ -38,10 +38,20 @@ def menu(screen):
     while state == MENU:
         screen.fill(WHITE)
         screen.blit(background,background_rect)
-        score_font = pygame.font.Font(path.join(fnt_dir, "PressStart2P.ttf"), 28)
+        score_font = pygame.font.Font(path.join(fnt_dir, "PressStart2P.ttf"), 50)
         text_surface = score_font.render("Beto no tiro", True, WHITE)
         text_rect = text_surface.get_rect()
-        text_rect.bottomleft = (WIDTH/2,  HEIGHT- 35)
+        text_rect.bottomleft = (150,  HEIGHT/2)
+        screen.blit(text_surface, text_rect)
+        score_font = pygame.font.Font(path.join(fnt_dir, "PressStart2P.ttf"), 28)
+        text_surface = score_font.render("Aperte 1 para jogar solo", True, BLACK)
+        text_rect = text_surface.get_rect()
+        text_rect.bottomleft = (50,  HEIGHT- 68)
+        screen.blit(text_surface, text_rect)
+        score_font = pygame.font.Font(path.join(fnt_dir, "PressStart2P.ttf"), 28)
+        text_surface = score_font.render("Aperte 2 para jogar duo", True, BLACK)
+        text_rect = text_surface.get_rect()
+        text_rect.bottomleft = (50,  HEIGHT- 35)
         screen.blit(text_surface, text_rect)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

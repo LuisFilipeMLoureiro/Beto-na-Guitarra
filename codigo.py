@@ -103,7 +103,7 @@ class Shooter(pygame.sprite.Sprite):
         
         #Centraliza na tela.
         self.rect.centerx = WIDTH / 2
-        self.rect.centery = HEIGHT / 2
+        self.rect.centery = HEIGHT / 2+70
         
         #Estabelecendo velocidades iniciais
         self.speedx=0
@@ -213,10 +213,10 @@ pygame.init()
 pygame.mixer.init()
 #Carrega a tela com esse tamanho
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-SOLO=0
-state=1
+SOLO=1
 def game_1player(screen):
     state=SOLO
+    INIT=10
     #Assets:
     mob_img=pygame.image.load(path.join(img_dir, "sold_up.png")).convert()
     mob_img = pygame.transform.scale(mob_img, (30, 30))        
@@ -296,7 +296,7 @@ def game_1player(screen):
     score = 0
     lives = 3
     ammunition = 50
-    while state==SOLO:
+    while state == SOLO:
         # Ajusta a velocidade do jogo.
         clock.tick(FPS)
         # Processa os eventos (mouse, teclado, botão, etc).
@@ -426,9 +426,6 @@ def game_1player(screen):
                     zombies.add(z)
                     lives -= 1
 
-        # A cada loop, redesenha o fundo e os sprites
-        all_sprites.update()
-
         #parede para o shooter
         hit_wallx = pygame.sprite.spritecollide(shooter, walls, False)
         for hit in hit_wallx:
@@ -452,15 +449,16 @@ def game_1player(screen):
                             c.rect.right = hit.rect.left 
                 if c.speedx < 0:
                             c.rect.left = hit.rect.right
-          
+                # A cada loop, redesenha o fundo e os sprites
+        for c in zombies:
             hit_wally = pygame.sprite.spritecollide(c, walls, False)
             for hit in hit_wally:
                 if c.speedy < 0:
                             c.rect.top = hit.rect.bottom
                 if c.speedy > 0:
                             c.rect.bottom = hit.rect.top
-
-
+                # A cada loop, redesenha o fundo e os sprites
+        all_sprites.update()
 
         # A cada loop, redesenha o fundo e os sprites
         screen.fill(BLACK)
@@ -491,14 +489,14 @@ def game_1player(screen):
             text_rect.bottomleft = ((WIDTH/2) - 140,  HEIGHT/2-20)
             screen.blit(text_surface, text_rect)
             
-            text_surface =game_over_font.render("PRESSIONE ENTER PARA VOLTAR AO MENU", True, BLACK)
+            text_surface =game_over_font.render("PRESSIONE ESPAÇO PARA VOLTAR AO MENU", True, BLACK)
             text_rect = text_surface.get_rect()
             text_rect.bottomleft = ((WIDTH/2) - 400,  HEIGHT/2 +120)
             screen.blit(text_surface, text_rect)
             sad_song.play()
             if event.type==pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    state==MENU
+                    state==INIT
         pygame.display.flip()
     return(state)
 try:

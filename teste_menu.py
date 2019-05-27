@@ -10,8 +10,8 @@ from os import path
 import time
 import random
 from configuracoes import INIT,SOLO,DUO,QUIT, menu, WIDTH,HEIGHT,FPS
-from teste_2players_projeto import game_2player
-from teste_local_projeto import game_1player
+from codigo_2players import game_2player
+from codigo import game_1player
 
 
 pygame.init()
@@ -26,11 +26,11 @@ try:
     while state != QUIT:
         if state == INIT:
             state = menu(screen)
-        elif state == SOLO:
+        if state == SOLO:
             state = game_1player(screen)
-        elif state == DUO:
+        if state == DUO:
             state = game_2player(screen)
-        else:
-            state = QUIT
+        if state == QUIT:
+            pygame.quit()
 finally:
     pygame.quit()

@@ -204,8 +204,9 @@ class Bullet(pygame.sprite.Sprite):
         if self.rect.left>WIDTH:
             self.kill()
 
-state=7
-DUO=9
+
+DUO=2
+state=DUO
 #Iniciação do Pygame
 pygame.init()
 #Carrega a tela com esse tamanho
@@ -267,6 +268,7 @@ def game_2player(screen):
     ammunition1 = 50
     ammunition2 = 50
     game_over=False
+    INIT=10
     # Cria os zumbis
     for i in range (10):
         zumbies = Zumbie(shooter,shooter2,lives1,lives2)
@@ -462,31 +464,26 @@ def game_2player(screen):
                     m= Medkit(hit.rect.centerx,hit.rect.centery)
                     medkits.add(m)
                     all_sprites.add(m)
-        hitz1=pygame.sprite.groupcollide(Jogadores1, ammos, False, True)
-        for hit in hitz1:
-                ammunition1 +=15
-                tictic.play()
-        hitz2=pygame.sprite.groupcollide(Jogadores2, ammos, False, True)
-        for hit in hitz2:
-                ammunition2 +=15
-                tictic.play()
-        hitm1=pygame.sprite.groupcollide(Jogadores1, medkits, False, True)
-        for hit in hitm1:
-                lives1 +=1
-                vida.play()
-        hitm2=pygame.sprite.groupcollide(Jogadores2, medkits, False, True)
-        for hit in hitm2:
-                lives2 +=1
-                vida.play()
-        gethit1=pygame.sprite.groupcollide(Jogadores1,zombies, False, True)
-        
-        if game_over == False:
+            hitz1=pygame.sprite.groupcollide(Jogadores1, ammos, False, True)
+            for hit in hitz1:
+                    ammunition1 +=15
+                    tictic.play()
+            hitz2=pygame.sprite.groupcollide(Jogadores2, ammos, False, True)
+            for hit in hitz2:
+                    ammunition2 +=15
+                    tictic.play()
+            hitm1=pygame.sprite.groupcollide(Jogadores1, medkits, False, True)
+            for hit in hitm1:
+                    lives1 +=1
+                    vida.play()
+            hitm2=pygame.sprite.groupcollide(Jogadores2, medkits, False, True)
+            for hit in hitm2:
+                    lives2 +=1
+                    vida.play()
+            gethit1=pygame.sprite.groupcollide(Jogadores1,zombies, False, True)
             for hit in gethit1:
-                lives1 -= 1
-                z = Zumbie(shooter,shooter2,lives1,lives2) 
-                all_sprites.add(z)
-                zombies.add(z)
                 morte.play()
+                lives1 -= 1
                 zs=gethit1[hit]
                 for c in zs:
                     lives1 -= 1
@@ -494,18 +491,12 @@ def game_2player(screen):
                     all_sprites.add(z)
                     zombies.add(z)
 
-        gethit2=pygame.sprite.groupcollide(Jogadores2,zombies, False, True)
-        
-        if game_over == False:
+            gethit2=pygame.sprite.groupcollide(Jogadores2,zombies, False, True)
             for hit in gethit2:
-                lives2 -= 1
-                z = Zumbie(shooter,shooter2,lives1,lives2) 
-                all_sprites.add(z)
-                zombies.add(z)
                 morte.play()
+                lives2 -= 1
                 zs=gethit2[hit]
                 for c in zs:
-                    lives1 -= 1
                     z = Zumbie(shooter,shooter2,lives1,lives2) 
                     all_sprites.add(z)
                     zombies.add(z)
@@ -551,14 +542,15 @@ def game_2player(screen):
             text_rect.bottomleft = ((WIDTH/2) - 140,  HEIGHT/2-20)
             screen.blit(text_surface, text_rect)
             
-            text_surface =game_over_font.render("PRESSIONE ENTER PARA VOLTAR AO MENU", True, BLACK)
+            text_surface =game_over_font.render("PRESSIONE ESPAÇO PARA VOLTAR AO MENU", True, BLACK)
             text_rect = text_surface.get_rect()
             text_rect.bottomleft = ((WIDTH/2) - 400,  HEIGHT/2 +120)
             screen.blit(text_surface, text_rect)
             sad_song.play()
             if event.type==pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    state==MENU
+                    state==INIT
+                    break
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
     return(state)
