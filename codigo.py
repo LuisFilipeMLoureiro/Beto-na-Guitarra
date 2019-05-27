@@ -415,7 +415,6 @@ def game_1player(screen):
         if game_over == False:
             for hit in gethit:
                 morte.play()
-                lives -= 1
                 z = Zumbie(shooter) 
                 all_sprites.add(z)
                 zombies.add(z)
@@ -425,6 +424,7 @@ def game_1player(screen):
                     z = Zumbie(shooter) 
                     all_sprites.add(z)
                     zombies.add(z)
+                    lives -= 1
 
         # A cada loop, redesenha o fundo e os sprites
         all_sprites.update()
