@@ -36,7 +36,6 @@ background_rect = background.get_rect()
 def menu(screen):
     state=MENU
     while state == MENU:
-        screen.fill(WHITE)
         screen.blit(background,background_rect)
         score_font = pygame.font.Font(path.join(fnt_dir, "PressStart2P.ttf"), 50)
         text_surface = score_font.render("Beto no tiro", True, WHITE)

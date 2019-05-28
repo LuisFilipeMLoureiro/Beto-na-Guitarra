@@ -403,21 +403,17 @@ def game_1player(screen):
                     m= Medkit(hit.rect.centerx,hit.rect.centery)
                     medkits.add(m)
                     all_sprites.add(m) 
-        hitz=pygame.sprite.groupcollide(Jogadores, ammos, False, True)
-        for hit in hitz:
-            ammunition +=15
-            tictic.play()
-        gethit=pygame.sprite.groupcollide(Jogadores,zombies, False, True)
-        hitm1=pygame.sprite.groupcollide(Jogadores, medkits, False, True)
-        for hit in hitm1:
-                lives +=1
-                vida.play()
-        if game_over == False:
+            hitz=pygame.sprite.groupcollide(Jogadores, ammos, False, True)
+            for hit in hitz:
+                ammunition +=15
+                tictic.play()
+            gethit=pygame.sprite.groupcollide(Jogadores,zombies, False, True)
+            hitm1=pygame.sprite.groupcollide(Jogadores, medkits, False, True)
+            for hit in hitm1:
+                    lives +=1
+                    vida.play()
             for hit in gethit:
                 morte.play()
-                z = Zumbie(shooter) 
-                all_sprites.add(z)
-                zombies.add(z)
                 zs=gethit[hit]
                 for c in zs:
 
@@ -497,6 +493,7 @@ def game_1player(screen):
             if event.type==pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     state==INIT
+                    break
         pygame.display.flip()
     return(state)
 try:
