@@ -32,6 +32,24 @@ YELLOW = (255, 255, 0)
 score_font = pygame.font.Font(path.join(fnt_dir, "PressStart2P.ttf"), 28)
 game_over_font = pygame.font.Font(path.join(fnt_dir, "PressStart2P.ttf"), 20)
 
+#highscore
+def highscore(score):
+    with open ('highscore_2.txt','r') as file:
+        h=(file.read().strip())
+        if h=='':
+            h=0
+        else:
+            h=int(h)
+    with open ('highscore_2.txt','w') as file:
+        maior_score=0
+        
+        if score>h:
+            file.write(str(score))
+            maior_score=score
+        else:
+            maior_score=h
+    return maior_score
+
 class Zumbie(pygame.sprite.Sprite):
     
     #Construtor
@@ -483,6 +501,11 @@ def game_1player(screen):
             text_surface = score_font.render("GAME OVER", True, BLACK)
             text_rect = text_surface.get_rect()
             text_rect.bottomleft = ((WIDTH/2) - 140,  HEIGHT/2-20)
+            screen.blit(text_surface, text_rect)
+
+            text_surface = score_font.render("HIGHSCORE:{:06d}".format(highscore(score)), True, BLACK)
+            text_rect = text_surface.get_rect()
+            text_rect.bottomleft = ((WIDTH/2) - 140,  HEIGHT/2+50)
             screen.blit(text_surface, text_rect)
             
             text_surface =game_over_font.render("PRESSIONE ESPAÇO PARA VOLTAR AO MENU", True, BLACK)
