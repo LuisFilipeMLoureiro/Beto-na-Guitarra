@@ -254,7 +254,7 @@ def game_1player(screen):
     som_zumbi_morrendo2=pygame.mixer.Sound(path.join(snd_dir, 'som_zm2.ogg'))
     som_zumbi_morrendo3=pygame.mixer.Sound(path.join(snd_dir, 'som_zm3.ogg'))
     morte=pygame.mixer.Sound(path.join(snd_dir, 'morte_conv.ogg'))
-    vida=pygame.mixer.Sound(path.join(snd_dir, 'vida.ogg'))
+    pqp=pygame.mixer.Sound(path.join(snd_dir, 'pqp.ogg'))
     tictic=pygame.mixer.Sound(path.join(snd_dir, 'tiqtiq.ogg'))
     sad_song=pygame.mixer.Sound(path.join(snd_dir,  'naruto_musica.ogg'))
     
@@ -429,7 +429,7 @@ def game_1player(screen):
             hitm1=pygame.sprite.groupcollide(Jogadores, medkits, False, True)
             for hit in hitm1:
                     lives +=1
-                    vida.play()
+                    pqp.play()
             for hit in gethit:
                 morte.play()
                 zs=gethit[hit]
