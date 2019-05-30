@@ -227,10 +227,10 @@ class Bullet(pygame.sprite.Sprite):
         if self.rect.left>WIDTH:
             self.kill()
 #Iniciação do Pygame
-pygame.init()
-pygame.mixer.init()
+#pygame.init()
+#pygame.mixer.init()
 #Carrega a tela com esse tamanho
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
+#screen = pygame.display.set_mode((WIDTH, HEIGHT))
 SOLO=1
 def game_1player(screen):
     state=SOLO
@@ -515,11 +515,11 @@ def game_1player(screen):
             sad_song.play()
             if event.type==pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    state==INIT
+                    state=INIT
                     break
         pygame.display.flip()
     return(state)
-try:
-    game_1player(screen)
-finally:
-    pygame.quit()
+#try:
+#    game_1player(screen)
+#finally:
+    #pygame.quit()

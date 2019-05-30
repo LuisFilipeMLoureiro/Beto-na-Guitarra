@@ -16,7 +16,7 @@ from codigo import game_1player
 
 pygame.init()
 pygame.mixer.init()
-
+pygame.font.init()
 screen = pygame.display.set_mode((WIDTH,HEIGHT))
 
 pygame.display.set_caption("Beto no tiro")

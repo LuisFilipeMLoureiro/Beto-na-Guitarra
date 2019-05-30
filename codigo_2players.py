@@ -208,9 +208,9 @@ class Bullet(pygame.sprite.Sprite):
 DUO=2
 state=DUO
 #Iniciação do Pygame
-pygame.init()
+#pygame.init()
 #Carrega a tela com esse tamanho
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
+#screen = pygame.display.set_mode((WIDTH, HEIGHT))
 def game_2player(screen):
     state=DUO
     #Assets:
@@ -549,13 +549,13 @@ def game_2player(screen):
             sad_song.play()
             if event.type==pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    state==INIT
+                    state=INIT
                     break
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
     return(state)
             
-try:
-    game_2player(screen)        
-finally:
-    pygame.quit()
+#try:
+#    game_2player(screen)        
+#finally:
+#    pygame.quit()
