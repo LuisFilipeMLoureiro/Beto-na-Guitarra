@@ -540,11 +540,10 @@ def game_2player(screen):
                     vida.play()
             gethit1=pygame.sprite.groupcollide(Jogadores1,zombies, False, True)
             for hit in gethit1:
-                morte.play()
                 lives1 -= 1
+                morte.play()
                 zs=gethit1[hit]
                 for c in zs:
-                    lives1 -= 1
                     z = Zumbie(shooter,shooter2,lives1,lives2) 
                     all_sprites.add(z)
                     zombies.add(z)
