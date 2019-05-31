@@ -91,15 +91,19 @@ class Zumbie(pygame.sprite.Sprite):
         self.shooter=shooter
         
     # Metodo que atualiza a posição da navinha
-    def update(self):
-        if self.shooter.rect.x > self.rect.x:
-            self.rect.x += self.speedx
-        if self.shooter.rect.x < self.rect.x:
-            self.rect.x -= self.speedx
+    def updatey(self):
         if self.shooter.rect.y > self.rect.y:
-            self.rect.y += self.speedy
+            self.speedy=1
         if self.shooter.rect.y < self.rect.y:
-            self.rect.y -= self.speedy
+            self.speedy=-1
+        self.rect.y += self.speedy
+
+    def updatex(self):
+        if self.shooter.rect.x > self.rect.x:
+            self.speedx=1   
+        if self.shooter.rect.x < self.rect.x:
+            self.speedx =-1
+        self.rect.x += self.speedx
         
 class Shooter(pygame.sprite.Sprite):
     
@@ -440,39 +444,42 @@ def game_1player(screen):
                     zombies.add(z)
                     lives -= 1
 
+        # A cada loop, redesenha o fundo e os sprites
+        all_sprites.update()
+        
         #parede para o shooter
         hit_wallx = pygame.sprite.spritecollide(shooter, walls, False)
         for hit in hit_wallx:
             if shooter.speedx > 0:
-                        shooter.rect.right = hit.rect.left 
+                shooter.rect.right = hit.rect.left 
             if shooter.speedx < 0:
-                        shooter.rect.left = hit.rect.right
+                shooter.rect.left = hit.rect.right
 
         hit_wally = pygame.sprite.spritecollide(shooter, walls, False)
         for hit in hit_wally:
             if shooter.speedy < 0:
-                        shooter.rect.top = hit.rect.bottom
+                shooter.rect.top = hit.rect.bottom
             if shooter.speedy > 0:
-                        shooter.rect.bottom = hit.rect.top
+                shooter.rect.bottom = hit.rect.top
 
         #parede para o zombie
         for c in zombies:
+            c.updatex()
             hit_wallx = pygame.sprite.spritecollide(c, walls, False)
             for hit in hit_wallx:
                 if c.speedx > 0:
-                            c.rect.right = hit.rect.left 
+                    c.rect.right = hit.rect.left 
                 if c.speedx < 0:
-                            c.rect.left = hit.rect.right
-                # A cada loop, redesenha o fundo e os sprites
-        for c in zombies:
+                    c.rect.left = hit.rect.right
+            c.updatey()
             hit_wally = pygame.sprite.spritecollide(c, walls, False)
             for hit in hit_wally:
                 if c.speedy < 0:
-                            c.rect.top = hit.rect.bottom
+                    c.rect.top = hit.rect.bottom
                 if c.speedy > 0:
-                            c.rect.bottom = hit.rect.top
-                # A cada loop, redesenha o fundo e os sprites
-        all_sprites.update()
+                    c.rect.bottom = hit.rect.top
+        
+
 
         # A cada loop, redesenha o fundo e os sprites
         screen.fill(BLACK)
