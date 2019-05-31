@@ -96,14 +96,17 @@ class Zumbie(pygame.sprite.Sprite):
             self.speedy=1
         if self.shooter.rect.y < self.rect.y:
             self.speedy=-1
-        self.rect.y += self.speedy
+        if abs(self.shooter.rect.y - self.rect.y)>10:
+            self.rect.y += self.speedy
+
 
     def updatex(self):
         if self.shooter.rect.x > self.rect.x:
             self.speedx=1   
         if self.shooter.rect.x < self.rect.x:
             self.speedx =-1
-        self.rect.x += self.speedx
+        if abs(self.shooter.rect.x - self.rect.x)>10:
+            self.rect.x += self.speedx
         
 class Shooter(pygame.sprite.Sprite):
     
@@ -446,7 +449,7 @@ def game_1player(screen):
 
         # A cada loop, redesenha o fundo e os sprites
         all_sprites.update()
-        
+
         #parede para o shooter
         hit_wallx = pygame.sprite.spritecollide(shooter, walls, False)
         for hit in hit_wallx:
