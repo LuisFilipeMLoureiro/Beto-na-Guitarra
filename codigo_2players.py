@@ -33,6 +33,24 @@ YELLOW = (255, 255, 0)
 score_font = pygame.font.Font(path.join(fnt_dir, "PressStart2P.ttf"), 28)
 game_over_font = pygame.font.Font(path.join(fnt_dir, "PressStart2P.ttf"), 20)
 
+#highscore
+def highscore(score):
+    with open ('highscore_2.txt','r') as file:
+        h=(file.read().strip())
+        if h=='':
+            h=0
+        else:
+            h=int(h)
+    with open ('highscore_2.txt','w') as file:
+        maior_score=0
+        
+        if score>h:
+            file.write(str(score))
+            maior_score=score
+        else:
+            maior_score=h
+    return maior_score
+
 class Zumbie(pygame.sprite.Sprite):
     
     #Construtor
@@ -74,38 +92,39 @@ class Zumbie(pygame.sprite.Sprite):
         self.lives1=lives1
         self.lives2=lives2
         
-    def update(self):
+    def updatex (self):
         if ((self.shooter.rect.x-self.rect.x)**2+(self.shooter.rect.y-self.rect.y)**2)**0.5 < ((self.shooter2.rect.x-self.rect.x)**2+(self.shooter.rect.y-self.rect.y)**2)**0.5 and self.lives1 > 0:
             if self.shooter.rect.x > self.rect.x:
-                self.rect.x += self.speedx
+                self.speedx=1
             if self.shooter.rect.x < self.rect.x:
-                self.rect.x -= self.speedx
-            if self.shooter.rect.y > self.rect.y:
-                self.rect.y += self.speedy
-            if self.shooter.rect.y < self.rect.y:
-                self.rect.y -= self.speedy
+                self.speedx=-1
+            self.rect.x += self.speedx
+
         elif self.lives2 > 0:
             if self.shooter2.rect.x > self.rect.x:
                 self.rect.x += self.speedx
             if self.shooter2.rect.x < self.rect.x:
                 self.rect.x -= self.speedx
+
+    def updatey (self):
+        if ((self.shooter.rect.x-self.rect.x)**2+(self.shooter.rect.y-self.rect.y)**2)**0.5 < ((self.shooter2.rect.x-self.rect.x)**2+(self.shooter.rect.y-self.rect.y)**2)**0.5 and self.lives1 > 0:
+            if self.shooter.rect.y > self.rect.y:
+                self.speedy=1
+            if self.shooter.rect.y < self.rect.y:
+                self.speedy=-1
+            self.rect.y += self.speedy
+                
+        elif self.lives2 > 0:
             if self.shooter2.rect.y > self.rect.y:
                 self.rect.y += self.speedy
             if self.shooter2.rect.y < self.rect.y:
                 self.rect.y -= self.speedy
-        else:
-            if self.shooter.rect.x > self.rect.x:
-                self.rect.x += self.speedx
-            if self.shooter.rect.x < self.rect.x:
-                self.rect.x -= self.speedx
-            if self.shooter.rect.y > self.rect.y:
-                self.rect.y += self.speedy
-            if self.shooter.rect.y < self.rect.y:
-                self.rect.y -= self.speedy
-class Shooter(pygame.sprite.Sprite):
+
+
+class Shooter(pygame.sprite.Sprite): #2 // 2+70
     
     #Construtor
-    def __init__(self):
+    def __init__(self,x,y):
         
         pygame.sprite.Sprite.__init__(self)
         mob_img=pygame.image.load(path.join(img_dir, "sold_up.png")).convert()
@@ -121,8 +140,8 @@ class Shooter(pygame.sprite.Sprite):
 
         
         #Centraliza na tela.
-        self.rect.centerx = WIDTH / 2
-        self.rect.centery = HEIGHT / 2
+        self.rect.centerx = x
+        self.rect.centery = y
         
         #Estabelecendo velocidades iniciais
         self.speedx=0
@@ -142,6 +161,27 @@ class Shooter(pygame.sprite.Sprite):
             self.rect.top= 0
         if self.rect.bottom >= HEIGHT:
             self.rect.bottom = HEIGHT
+
+class Walls(pygame.sprite.Sprite):
+    
+    #Construtor
+    def __init__(self,x,y,d):
+        
+        pygame.sprite.Sprite.__init__(self)
+        
+        #WALL
+        parede_ft=pygame.image.load(path.join(img_dir, "parede.png")).convert()
+        self.image=parede_ft
+        self.image=pygame.transform.scale(self.image,(d,d))
+        self.rect=self.image.get_rect()
+        
+        #Centraliza na tela.
+        self.rect.centerx = x
+        self.rect.centery = y
+
+        # Deixando transparente.
+        self.image.set_colorkey(WHITE)
+
 class Ammo(pygame.sprite.Sprite):
     # Construtor da classe.
     def __init__(self, x, y):
@@ -233,7 +273,7 @@ def game_2player(screen):
     morte=pygame.mixer.Sound(path.join(snd_dir, 'morte_conv.ogg'))
     vida=pygame.mixer.Sound(path.join(snd_dir, 'vida.ogg'))
     tictic=pygame.mixer.Sound(path.join(snd_dir, 'tiqtiq.ogg'))
-    sad_song=pygame.mixer.Sound(path.join(snd_dir, 'NARUTO FUNK - Sadness and Sorrow (PMM Funk Remix).ogg'))
+    sad_song=pygame.mixer.Sound(path.join(snd_dir, 'naruto_musica.ogg'))
     
     # Nome do jogo
     pygame.display.set_caption("BetoField")
@@ -255,12 +295,14 @@ def game_2player(screen):
     zombies = pygame.sprite.Group()
     ammos = pygame.sprite.Group()
     medkits = pygame.sprite.Group()
-    shooter=Shooter()
+    shooter=Shooter(375,137)
     Jogadores1.add(shooter)
     all_sprites.add(shooter)
-    shooter2=Shooter()
+    shooter2=Shooter(470,137)
     Jogadores2.add(shooter2)
     all_sprites.add(shooter2)
+    walls = pygame.sprite.Group()
+
     #Definindo variáveis
     score = 0
     lives1 = 3
@@ -269,6 +311,7 @@ def game_2player(screen):
     ammunition2 = 50
     game_over=False
     INIT=10
+
     # Cria os zumbis
     for i in range (10):
         zumbies = Zumbie(shooter,shooter2,lives1,lives2)
@@ -281,6 +324,21 @@ def game_2player(screen):
         #Invertendo o display
     pygame.display.flip()
     pygame.mixer.music.play(loops=-1)
+
+        #walls
+    wall=Walls(415,221,54)
+    wall2=Walls(442,252,28)
+    wall3=Walls(227,316,54)
+    wall4=Walls(257,346,28)
+    walls.add(wall2)
+    walls.add(wall)
+    walls.add(wall3)
+    walls.add(wall4)
+    all_sprites.add(wall)
+    all_sprites.add(wall2)
+    all_sprites.add(wall3)
+    all_sprites.add(wall4)
+
         # Loop principal.
     while state==DUO:
         
@@ -440,7 +498,7 @@ def game_2player(screen):
             bullet_position2=pygame.transform.rotate(bullet_image,45)
             Speed2yBull=-15
             Speed2xBull=-15
-        if lives1==0:
+        if lives1 == 0:
             shooter.kill()
         if lives2 == 0:
             shooter2.kill()
@@ -503,6 +561,54 @@ def game_2player(screen):
 
         # A cada loop, redesenha o fundo e os sprites
         all_sprites.update()
+
+        #parede para o shooter1
+        hit_wallx = pygame.sprite.spritecollide(shooter, walls, False)
+        for hit in hit_wallx:
+            if shooter.speedx > 0:
+                shooter.rect.right = hit.rect.left 
+            if shooter.speedx < 0:
+                shooter.rect.left = hit.rect.right
+
+        hit_wally = pygame.sprite.spritecollide(shooter, walls, False)
+        for hit in hit_wally:
+            if shooter.speedy < 0:
+                shooter.rect.top = hit.rect.bottom
+            if shooter.speedy > 0:
+                shooter.rect.bottom = hit.rect.top
+
+        #parede para o shooter2
+        hit_wallx = pygame.sprite.spritecollide(shooter2, walls, False)
+        for hit in hit_wallx:
+            if shooter2.speedx > 0:
+                shooter2.rect.right = hit.rect.left 
+            if shooter2.speedx < 0:
+                shooter2.rect.left = hit.rect.right
+
+        hit_wally = pygame.sprite.spritecollide(shooter2, walls, False)
+        for hit in hit_wally:
+            if shooter2.speedy < 0:
+                shooter2.rect.top = hit.rect.bottom
+            if shooter2.speedy > 0:
+                shooter2.rect.bottom = hit.rect.top    
+
+        #parede para o zombie
+        for c in zombies:
+            c.updatex()
+            hit_wallx = pygame.sprite.spritecollide(c, walls, False)
+            for hit in hit_wallx:
+                if c.speedx > 0:
+                    c.rect.right = hit.rect.left 
+                if c.speedx < 0:
+                    c.rect.left = hit.rect.right
+            c.updatey()
+            hit_wally = pygame.sprite.spritecollide(c, walls, False)
+            for hit in hit_wally:
+                if c.speedy < 0:
+                    c.rect.top = hit.rect.bottom
+                if c.speedy > 0:
+                    c.rect.bottom = hit.rect.top
+
         # A cada loop, redesenha o fundo e os sprites
         
         screen.blit(background, background_rect)
@@ -542,6 +648,11 @@ def game_2player(screen):
             text_rect.bottomleft = ((WIDTH/2) - 140,  HEIGHT/2-20)
             screen.blit(text_surface, text_rect)
             
+            text_surface = score_font.render("HIGHSCORE:{:06d}".format(highscore(score)), True, BLACK)
+            text_rect = text_surface.get_rect()
+            text_rect.bottomleft = ((WIDTH/2) - 140,  HEIGHT/2+50)
+            screen.blit(text_surface, text_rect)
+
             text_surface =game_over_font.render("PRESSIONE ESPAÇO PARA VOLTAR AO MENU", True, BLACK)
             text_rect = text_surface.get_rect()
             text_rect.bottomleft = ((WIDTH/2) - 400,  HEIGHT/2 +120)
