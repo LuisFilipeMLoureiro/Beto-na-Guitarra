@@ -98,8 +98,7 @@ class Zumbie(pygame.sprite.Sprite):
                 self.speedx=1
             if self.shooter.rect.x < self.rect.x:
                 self.speedx=-1
-            if abs(self.shooter.rect.x - self.rect.x)>10:
-                self.rect.x += self.speedx
+            self.rect.x += self.speedx
 
         elif self.lives2 > 0:
             if self.shooter2.rect.x > self.rect.x:
@@ -113,8 +112,7 @@ class Zumbie(pygame.sprite.Sprite):
                 self.speedy=1
             if self.shooter.rect.y < self.rect.y:
                 self.speedy=-1
-            if abs(self.shooter.rect.y - self.rect.y)>10:
-                self.rect.y += self.speedy
+            self.rect.y += self.speedy
                 
         elif self.lives2 > 0:
             if self.shooter2.rect.y > self.rect.y:
