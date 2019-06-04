@@ -26,8 +26,6 @@ YELLOW = (255, 255, 0)
 #screen = pygame.display.set_mode((WIDTH,HEIGHT))
 MENU=0
 state=MENU
-
-
 img_dir = path.join(path.dirname(__file__), 'imagens')
 fnt_dir = path.join(path.dirname(__file__), 'font')
     # Comando para evitar travamentos.

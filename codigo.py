@@ -34,13 +34,13 @@ game_over_font = pygame.font.Font(path.join(fnt_dir, "PressStart2P.ttf"), 20)
 
 #highscore
 def highscore(score):
-    with open ('highscore_certos.txt','r') as file:
+    with open ('highscore_2.txt','r') as file:
         h=(file.read().strip())
         if h=='':
             h=0
         else:
             h= int(h)
-    with open ('highscore_certos.txt','w') as file:
+    with open ('highscore_2.txt','w') as file:
         maior_score=0
         
         if score>h:
@@ -66,7 +66,7 @@ class Zumbie(pygame.sprite.Sprite):
         
         
         #Deixando Transparente
-        self.image.set_colorkey(WHITE)
+        self.image.set_colorkey(BLACK)
         
         #Definindo posição do zumbie como aleatório
         LADO=random.randint(1,4)
@@ -415,34 +415,6 @@ def game_1player(screen):
             SpeedyBull=-15
             SpeedxBull=-15
 
-        #rotação da imagem do zombie 
-        for q in zombies:
-            
-            if q.speedx==0 and q.speedy<0:
-                q.image=pygame.transform.rotate(zumbie_img,0)
-
-            if q.speedx>0 and q.speedy<0:
-                q.image=pygame.transform.rotate(zumbie_img,315)
-
-            if q.speedx>0 and q.speedy==0:
-                q.image=pygame.transform.rotate(zumbie_img,270)
-
-            if q.speedx>0 and q.speedy>0:
-                q.image=pygame.transform.rotate(zumbie_img,225)
-
-            if shooter.speedx==0 and shooter.speedy>0:
-                q.image=pygame.transform.rotate(zumbie_img,180)
-
-            if shooter.speedx<0 and shooter.speedy>0:
-                q.image=pygame.transform.rotate(zumbie_img,135)
-
-            if shooter.speedx<0 and shooter.speedy==0:
-                q.image=pygame.transform.rotate(zumbie_img,90)
-
-            if shooter.speedx<0 and shooter.speedy<0:
-                q.image=pygame.transform.rotate(zumbie_img,45)
-
-
         # Se o tiro chegar no zumbie, byebye zumbie
         hits = pygame.sprite.groupcollide(zombies, bullets, True, True)
         if game_over == False:
@@ -519,7 +491,7 @@ def game_1player(screen):
 
 
         # A cada loop, redesenha o fundo e os sprites
-        screen.fill(BLACK)
+        #screen.fill(BLACK)
         screen.blit(background, background_rect)
         all_sprites.draw(screen)
          

@@ -10,8 +10,8 @@ from os import path
 import time
 import random
 from configuracoes import INIT,SOLO,DUO,QUIT, menu, WIDTH,HEIGHT,FPS
-from codigo_2players import game_2player
-from codigo import game_1player
+from codigo_2players import game_2player, highscore
+from codigo import game_1player, highscore
 
 
 pygame.init()

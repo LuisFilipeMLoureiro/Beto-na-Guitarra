@@ -35,13 +35,13 @@ game_over_font = pygame.font.Font(path.join(fnt_dir, "PressStart2P.ttf"), 20)
 
 #highscore
 def highscore(score):
-    with open ('highscore_certos.txt','r') as file:
+    with open ('highscore_2.txt','r') as file:
         h=(file.read().strip())
         if h=='':
             h=0
         else:
             h=int(h)
-    with open ('highscore_certos.txt','w') as file:
+    with open ('highscore_2.txt','w') as file:
         maior_score=0
         
         if score>h:
@@ -67,7 +67,7 @@ class Zumbie(pygame.sprite.Sprite):
         
         
         #Deixando Transparente
-        self.image.set_colorkey(WHITE)
+        self.image.set_colorkey(BLACK)
         #Definindo posição do zumbie como aleatório
         LADO=random.randint(1,4)
         
@@ -102,10 +102,16 @@ class Zumbie(pygame.sprite.Sprite):
 
         elif self.lives2 > 0:
             if self.shooter2.rect.x > self.rect.x:
-                self.rect.x += self.speedx
+                self.speedx=1
             if self.shooter2.rect.x < self.rect.x:
-                self.rect.x -= self.speedx
-
+                self.speedx=-1
+            self.rect.x += self.speedx
+        else:
+            if self.shooter.rect.x > self.rect.x:
+                self.speedx=1
+            if self.shooter.rect.x < self.rect.x:
+                self.speedx=-1
+            self.rect.x += self.speedx
     def updatey (self):
         if ((self.shooter.rect.x-self.rect.x)**2+(self.shooter.rect.y-self.rect.y)**2)**0.5 < ((self.shooter2.rect.x-self.rect.x)**2+(self.shooter.rect.y-self.rect.y)**2)**0.5 and self.lives1 > 0:
             if self.shooter.rect.y > self.rect.y:
@@ -116,10 +122,18 @@ class Zumbie(pygame.sprite.Sprite):
                 
         elif self.lives2 > 0:
             if self.shooter2.rect.y > self.rect.y:
-                self.rect.y += self.speedy
+                self.speedy=1
             if self.shooter2.rect.y < self.rect.y:
-                self.rect.y -= self.speedy
-
+                self.speedy=-1
+            self.rect.y += self.speedy
+        else:
+            if self.shooter.rect.y > self.rect.y:
+                self.speedy=1
+            if self.shooter.rect.y < self.rect.y:
+                self.speedy=-1
+            self.rect.y += self.speedy
+                
+            
 
 class Shooter(pygame.sprite.Sprite): #2 // 2+70
     
