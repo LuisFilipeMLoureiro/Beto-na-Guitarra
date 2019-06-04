@@ -14,7 +14,7 @@ Os demais códigos:
 
 codigo.py refere-se ao jogo solo
 
-codigo_2players.py refere-se ao jogo solo
+codigo_2players.py refere-se ao jogo duo
 
 configuracoes.py contem variaveis e o menu
 
