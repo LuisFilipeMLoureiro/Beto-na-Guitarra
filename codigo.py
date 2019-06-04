@@ -35,19 +35,20 @@ game_over_font = pygame.font.Font(path.join(fnt_dir, "PressStart2P.ttf"), 20)
 #highscore
 def highscore(score):
     with open ('highscore_2.txt','r') as file:
-        h=(file.read().strip())
+        h=(file.read())
+        
         if h=='':
             h=0
         else:
             h= int(h)
-    with open ('highscore_2.txt','w') as file:
-        maior_score=0
-        
+            
+        maior_score=h
         if score>h:
-            file.write(str(score))
-            maior_score=score
-        else:
-            h=maior_score
+            with open ('highscore_2.txt','w') as file:
+                
+                file.write(str(score))
+                maior_score=score
+
     return maior_score
 
 class Zumbie(pygame.sprite.Sprite):
