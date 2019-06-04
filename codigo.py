@@ -533,6 +533,7 @@ def game_1player(screen):
             if event.type==pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     state=INIT
+                    sad_song.stop()
                     break
         pygame.display.flip()
     return(state)
