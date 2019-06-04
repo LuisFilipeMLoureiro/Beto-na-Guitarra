@@ -489,7 +489,7 @@ def game_1player(screen):
                 if c.speedy > 0:
                     c.rect.bottom = hit.rect.top
         
-
+        bullet_na_wall=pygame.sprite.groupcollide(bullets, walls, True, False)
 
         # A cada loop, redesenha o fundo e os sprites
         #screen.fill(BLACK)

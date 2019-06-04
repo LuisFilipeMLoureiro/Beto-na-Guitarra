@@ -34,8 +34,8 @@ score_font = pygame.font.Font(path.join(fnt_dir, "PressStart2P.ttf"), 28)
 game_over_font = pygame.font.Font(path.join(fnt_dir, "PressStart2P.ttf"), 20)
 
 #highscore
-def highscore(score):
-    with open ('highscore_2.txt','r') as file:
+def highscore2(score):
+    with open ('highscore_certos.txt','r') as file:
         h=(file.read())
         
         if h=='':
@@ -45,7 +45,7 @@ def highscore(score):
             
         maior_score=h
         if score>h:
-            with open ('highscore_2.txt','w') as file:
+            with open ('highscore_certos.txt','w') as file:
                 
                 file.write(str(score))
                 maior_score=score
@@ -622,6 +622,8 @@ def game_2player(screen):
                     c.rect.top = hit.rect.bottom
                 if c.speedy > 0:
                     c.rect.bottom = hit.rect.top
+                    
+        bullet_na_wall=pygame.sprite.groupcollide(bullets, walls, True, False)
 
         # A cada loop, redesenha o fundo e os sprites
         
@@ -662,7 +664,7 @@ def game_2player(screen):
             text_rect.bottomleft = ((WIDTH/2) - 140,  HEIGHT/2-20)
             screen.blit(text_surface, text_rect)
             
-            text_surface = score_font.render("HIGHSCORE:{:06d}".format(highscore(score)), True, BLACK)
+            text_surface = score_font.render("HIGHSCORE:{:06d}".format(highscore2(score)), True, BLACK)
             text_rect = text_surface.get_rect()
             text_rect.bottomleft = ((WIDTH/2) - 140,  HEIGHT/2+50)
             screen.blit(text_surface, text_rect)
