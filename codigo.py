@@ -34,20 +34,20 @@ game_over_font = pygame.font.Font(path.join(fnt_dir, "PressStart2P.ttf"), 20)
 
 #highscore
 def highscore(score):
-    with open ('highscore_2.txt','r') as file:
+    with open ('highscore_certos.txt','r') as file:
         h=(file.read().strip())
         if h=='':
             h=0
         else:
-            h=int(h)
-    with open ('highscore_2.txt','w') as file:
+            h= int(h)
+    with open ('highscore_certos.txt','w') as file:
         maior_score=0
         
         if score>h:
             file.write(str(score))
             maior_score=score
         else:
-            maior_score=h
+            h=maior_score
     return maior_score
 
 class Zumbie(pygame.sprite.Sprite):
@@ -66,7 +66,7 @@ class Zumbie(pygame.sprite.Sprite):
         
         
         #Deixando Transparente
-        self.image.set_colorkey(BLACK)
+        self.image.set_colorkey(WHITE)
         
         #Definindo posição do zumbie como aleatório
         LADO=random.randint(1,4)
@@ -243,9 +243,12 @@ def game_1player(screen):
     state=SOLO
     INIT=10
     #Assets:
-    mob_img=pygame.image.load(path.join(img_dir, "sold_up.png")).convert()
+    mob_img = pygame.image.load(path.join(img_dir, "sold_up.png")).convert()
     mob_img = pygame.transform.scale(mob_img, (30, 30))        
     mob_img.set_colorkey(WHITE)
+    zumbie_img = pygame.image.load(path.join(img_dir, "zumbie.png")).convert()
+    zumbie_img = pygame.transform.scale(zumbie_img, (30, 30))        
+    zumbie_img.set_colorkey(WHITE)
     bullet_image=pygame.image.load(path.join(img_dir, "balta_teste.png")).convert()
     bullet_image = pygame.transform.scale(bullet_image, (10, 10))        
     bullet_position=bullet_image
@@ -369,6 +372,8 @@ def game_1player(screen):
                     shooter.speedy += 3
                 if event.key == pygame.K_DOWN:
                     shooter.speedy -= 3
+        
+        #rotação da imagem do shooter
         if shooter.speedx==0 and shooter.speedy<0:
             shooter.image=pygame.transform.rotate(mob_img,0)
             bullet_position=pygame.transform.rotate(bullet_image,0)
@@ -409,6 +414,35 @@ def game_1player(screen):
             bullet_position=pygame.transform.rotate(bullet_image,45)
             SpeedyBull=-15
             SpeedxBull=-15
+
+        #rotação da imagem do zombie 
+        for q in zombies:
+            
+            if q.speedx==0 and q.speedy<0:
+                q.image=pygame.transform.rotate(zumbie_img,0)
+
+            if q.speedx>0 and q.speedy<0:
+                q.image=pygame.transform.rotate(zumbie_img,315)
+
+            if q.speedx>0 and q.speedy==0:
+                q.image=pygame.transform.rotate(zumbie_img,270)
+
+            if q.speedx>0 and q.speedy>0:
+                q.image=pygame.transform.rotate(zumbie_img,225)
+
+            if shooter.speedx==0 and shooter.speedy>0:
+                q.image=pygame.transform.rotate(zumbie_img,180)
+
+            if shooter.speedx<0 and shooter.speedy>0:
+                q.image=pygame.transform.rotate(zumbie_img,135)
+
+            if shooter.speedx<0 and shooter.speedy==0:
+                q.image=pygame.transform.rotate(zumbie_img,90)
+
+            if shooter.speedx<0 and shooter.speedy<0:
+                q.image=pygame.transform.rotate(zumbie_img,45)
+
+
         # Se o tiro chegar no zumbie, byebye zumbie
         hits = pygame.sprite.groupcollide(zombies, bullets, True, True)
         if game_over == False:
