@@ -1,8 +1,8 @@
-# BetoField
+# BetonoTiro
 
-BetoField também conhecido como Beto no Tiro apresenta uma jogabilidade nunca antes vista. Com sons únicos criados pelos  próprios programadores para cada ação do herói, o jogo chega a viciar. Boa Diversão!🤩
+Jogo criado por meio de Pygame produzido no primeiro semestre no bacharelado de engenharia de computação
 
-Elimine os infinitos zumbies e conquiste o HighScore!🤑
+
 
 Autores: Luís Filipe Loureiro, André Nadalini, Roberto Schnorrenberg
 
@@ -19,3 +19,4 @@ codigo_2players.py refere-se ao jogo duo
 configuracoes.py contem variaveis e o menu
 
 
+# Elimine os infinitos zumbies e conquiste o HighScore!
